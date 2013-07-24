@@ -6068,4 +6068,10 @@ function validTagName ($s, $allow_autotag = FALSE)
 	return FALSE;
 }
 
+function cmp_array_sizes ($a, $b)
+{
+	$diff = count ($a) - count ($b);
+	return $diff < 0 ? -1 : ($diff > 0 ? 1 : 0);
+}
+
 ?>
