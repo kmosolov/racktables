@@ -2112,6 +2112,12 @@ $dictionary = array
 	2026 => array ('chapter_id' => 12, 'dict_value' => '[[Cisco%GPASS%Catalyst 4948E | http://www.cisco.com/en/US/products/ps10947/index.html]]'),
 	2027 => array ('chapter_id' => 14, 'dict_value' => 'Huawei VRP 8.5'),
 	2028 => array ('chapter_id' => 14, 'dict_value' => 'Cisco NX-OS 6.1'),
+	2028 => array ('chapter_id' => 14, 'dict_value' => 'Cisco NX-OS 6.1'),
+
+	// a hole here
+
+	2080 => array ('chapter_id' => 14, 'dict_value' => 'Huawei VRP 5.110'),
+	2081 => array ('chapter_id' => 14, 'dict_value' => 'Huawei VRP 5.120'),
 
 # Any new "default" dictionary records must go above this line (i.e., with
 # dict_key code less, than 50000). This is necessary to keep AUTO_INCREMENT
