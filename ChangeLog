@@ -4,6 +4,7 @@
 		rspools were linked with the same balancer-vsg pair
 	update: support of Huawei CE5800 series switch
 	update: port type could now be changed even if port is linked
+	update: mgmt link on FQDN (telnet, ssh, rdp) now supports any protocol (MGMT_PROTOS config var)
 0.20.5 2013-06-23
 	bugfix: 500 server error if protocol was not specified in
 		terminal_settings subroutine

@@ -204,6 +204,15 @@ major releases. So it is strongly recommended to convert it to the new format.
 ENDOFTEXT
 ,
 
+	'0.20.6' => <<<ENDOFTEXT
+Config variables TELNET_OBJS_LISTSRC, SSH_OBJS_LISTSRC, RDP_OBJS_LISTSRC were merged into new MGMT_PROTOS.
+The old ones were deleted from the DB. MGMT_PROTOS allows to specify any management protocol for a particular
+device list by RackCode filter. The default value is 'ssh: {\$typeid_4}, telnet: {\$typeid_8}' which leads to
+object's FQDN linked to 'ssh://server.fqdn' and 'telnet://switch.fqdn'. If the old variables contained any data,
+it will be converted to the new syntax and stored into MGMT_PROTOS variable.
+ENDOFTEXT
+,
+
 );
 
 // At the moment we assume, that for any two releases we can
@@ -261,6 +270,7 @@ function getDBUpgradePath ($v1, $v2)
 		'0.20.3',
 		'0.20.4',
 		'0.20.5',
+		'0.20.6',
 	);
 	if (!in_array ($v1, $versionhistory) or !in_array ($v2, $versionhistory))
 		return NULL;
@@ -1772,6 +1782,15 @@ CREATE TABLE `VSEnabledPorts` (
 			$query[] = "ALTER TABLE `UserConfig` DROP FOREIGN KEY `UserConfig-FK-user`";
 			$query[] = "UPDATE Config SET varvalue = '0.20.5' WHERE varname = 'DB_VERSION'";
 			break;
+		case '0.20.6':
+			// convert values of old 'TELNET_OBJS_LISTSRC' 'SSH_OBJS_LISTSRC', 'RDP_OBJS_LISTSRC' variables into 'MGMT_PROTOS'
+			$query[] = "INSERT INTO `Config` (varname, varvalue, vartype, emptyok, is_hidden, is_userdefined, description) VALUES ('MGMT_PROTOS','ssh: {\$typeid_4}; telnet: {\$typeid_8}','string','yes','no','yes','Mapping of management protocol to devices')";
+			if ('' !== $mgmt_converted_var = convertMgmtConfigVars())
+				$query[] = "UPDATE `Config` SET varvalue = '" . mysql_escape_string ($mgmt_converted_var) . "' WHERE varname = 'MGMT_PROTOS'"; // TODO: call of deprecated function
+			$query[] = "DELETE `Config`,`UserConfig` FROM `Config` LEFT JOIN `UserConfig` USING (`varname`) WHERE `Config`.`varname` IN ('TELNET_OBJS_LISTSRC', 'SSH_OBJS_LISTSRC', 'RDP_OBJS_LISTSRC')";
+
+			$query[] = "UPDATE Config SET varvalue = '0.20.6' WHERE varname = 'DB_VERSION'";
+			break;
 		case 'dictionary':
 			$query = reloadDictionary();
 			break;
@@ -2085,6 +2104,24 @@ function usePreparedInsertBlade ($tablename, $columns)
 	{
 		throw convertPDOException ($e);
 	}
+}
+
+// converts the values of old-style config vars TELNET_OBJS_LISTSRC, SSH_OBJS_LISTSRC, RDP_OBJS_LISTSRC
+// to the format of MGMT_PROTOS (comma-separated list of "proto: rackcode" pairs)
+function convertMgmtConfigVars()
+{
+	global $dbxlink;
+	$ret = array();
+	foreach (array ('telnet' => 'TELNET_OBJS_LISTSRC', 'ssh' => 'SSH_OBJS_LISTSRC', 'rdp' => 'RDP_OBJS_LISTSRC') as $proto => $varname)
+	{
+		$result = $dbxlink->prepare ("SELECT varvalue FROM Config WHERE varname = ?");
+		$result->execute (array ($varname));
+		if ($row = $result->fetch (PDO::FETCH_ASSOC))
+			if ($row['varvalue'] != 'false' && $row['varvalue'] != '')
+				$ret[] = "$proto: " . $row['varvalue'];
+		unset ($result);
+	}
+	return implode (',', $ret);
 }
 
 ?>
