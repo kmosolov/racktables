@@ -107,6 +107,19 @@ $opspec_list['object-ports-deleteAll'] = array
 		array ('url_argname' => 'object_id', 'assertion' => 'uint'),
 	),
 );
+$opspec_list['object-ports-editLink'] = array
+(
+	'table' => 'L1Link',
+	'action' => 'UPDATE',
+	'set_arglist' => array
+	(
+		array ('url_argname' => 'cable', 'assertion' => 'string0'),
+	),
+	'where_arglist' => array
+	(
+		array ('url_argname' => 'link_id', 'table_colname' => 'id', 'assertion' => 'uint'),
+	),
+);
 $opspec_list['location-log-del'] = array
 (
 	'table' => 'ObjectLog',
@@ -735,19 +748,25 @@ function editPortForObject ()
 {
 	global $sic;
 	assertUIntArg ('port_id');
-	if (array_key_exists ('port_type_id', $_REQUEST))
-	{
-		assertUIntArg ('port_type_id');
-		assertStringArg ('reservation_comment', TRUE);
-		genericAssertion ('l2address', 'l2address0');
-		genericAssertion ('name', 'string');
-		commitUpdatePort ($sic['object_id'], $sic['port_id'], $sic['name'], $sic['port_type_id'], $sic['label'], $sic['l2address'], $sic['reservation_comment']);
-	}
+	assertUIntArg ('port_type_id');
+	assertStringArg ('reservation_comment', TRUE);
+	genericAssertion ('l2address', 'l2address0');
+	genericAssertion ('name', 'string');
+	commitUpdatePort ($sic['object_id'], $sic['port_id'], $sic['name'], $sic['port_type_id'], $sic['label'], $sic['l2address'], $sic['reservation_comment']);
 	if (array_key_exists ('cable', $_REQUEST))
-	{
-		assertUIntArg ('link_id');
-		commitUpdatePortLink ($sic['link_id'], $sic['cable']);
-	}
+		commitUpdatePortLink ($sic['port_id'], $sic['cable']);
+
+	return showFuncMessage (__FUNCTION__, 'OK', array ($_REQUEST['name']));
+}
+
+$msgcode['editL1Link']['OK'] = 6;
+function editL1Link ()
+{
+	global $sic;
+	assertUIntArg ('link_id');
+	assertStringArg ('cable', TRUE);
+	commitUpdateL1Link ($sic['link_id'], $sic['cable']);
+
 	return showFuncMessage (__FUNCTION__, 'OK', array ($_REQUEST['name']));
 }
 
@@ -2509,7 +2528,7 @@ function updateFileText ()
 $msgcode['addIIFOIFCompat']['OK'] = 48;
 function addIIFOIFCompat ()
 {
-	assertUIntArg ('iif_id');
+	genericAssertion ('iif_id', 'iif');
 	assertUIntArg ('oif_id');
 	commitSupplementPIC ($_REQUEST['iif_id'], $_REQUEST['oif_id']);
 	return showFuncMessage (__FUNCTION__, 'OK');
@@ -3185,9 +3204,13 @@ function getOpspec()
 
 function unlinkPort ()
 {
-	assertUIntArg ('link_id');
-	commitUnlinkPort ($_REQUEST['link_id']);
-	showSuccess ('Port unlinked successfully');
+	$port_id = assertUIntArg ('port_id');
+	$link_id = NULL;
+	if (! empty ($_REQUEST['link_id']))
+		$link_id = assertUIntArg ('link_id');
+
+	if (commitUnlinkPort ($port_id, $link_id))
+		showSuccess ('Port unlinked successfully');
 }
 
 function clearVlan()

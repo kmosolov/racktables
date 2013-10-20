@@ -768,10 +768,9 @@ function get_pseudo_file ($name)
   `porta` int(10) unsigned NOT NULL default '0',
   `portb` int(10) unsigned NOT NULL default '0',
   `cable` char(64) DEFAULT NULL,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `porta-portb-unique` (`porta`,`portb`),
-  KEY `porta` (`porta`),
-  KEY `portb` (`portb`),
+  PRIMARY KEY  (`porta`,`portb`),
+  UNIQUE KEY `porta` (`porta`),
+  UNIQUE KEY `portb` (`portb`),
   CONSTRAINT `Link-FK-a` FOREIGN KEY (`porta`) REFERENCES `Port` (`id`) ON DELETE CASCADE,
   CONSTRAINT `Link-FK-b` FOREIGN KEY (`portb`) REFERENCES `Port` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB";
@@ -1158,10 +1157,21 @@ BEGIN
   DECLARE tmp, porta_type, portb_type, count INTEGER;
   IF NEW.porta = NEW.portb THEN
     SET NEW.porta = NULL;
-  ELSEIF NEW.porta > NEW.portb THEN
-    SET tmp = NEW.porta;
-    SET NEW.porta = NEW.portb;
-    SET NEW.portb = tmp;
+  END IF; 
+  SELECT type INTO porta_type FROM Port WHERE id = NEW.porta;
+  SELECT type INTO portb_type FROM Port WHERE id = NEW.portb;
+  SELECT COUNT(*) INTO count FROM PortCompat WHERE (type1 = porta_type AND type2 = portb_type) OR (type1 = portb_type AND type2 = porta_type);
+  IF count = 0 THEN
+    SET NEW.porta = NULL;
+  END IF;
+END";
+
+		$query[] = "CREATE TRIGGER `checkL1LinkBeforeInsert` BEFORE INSERT ON `L1Link`
+  FOR EACH ROW
+BEGIN
+  DECLARE tmp, porta_type, portb_type, count INTEGER;
+  IF NEW.porta = NEW.portb THEN
+    SET NEW.porta = NULL;
   END IF; 
   SELECT type INTO porta_type FROM Port WHERE id = NEW.porta;
   SELECT type INTO portb_type FROM Port WHERE id = NEW.portb;
@@ -1177,10 +1187,21 @@ BEGIN
   DECLARE tmp, porta_type, portb_type, count INTEGER;
   IF NEW.porta = NEW.portb THEN
     SET NEW.porta = NULL;
-  ELSEIF NEW.porta > NEW.portb THEN
-    SET tmp = NEW.porta;
-    SET NEW.porta = NEW.portb;
-    SET NEW.portb = tmp;
+  END IF; 
+  SELECT type INTO porta_type FROM Port WHERE id = NEW.porta;
+  SELECT type INTO portb_type FROM Port WHERE id = NEW.portb;
+  SELECT COUNT(*) INTO count FROM PortCompat WHERE (type1 = porta_type AND type2 = portb_type) OR (type1 = portb_type AND type2 = porta_type);
+  IF count = 0 THEN
+    SET NEW.porta = NULL;
+  END IF;
+END";
+
+		$query[] = "CREATE TRIGGER `checkL1LinkBeforeUpdate` BEFORE UPDATE ON `L1Link`
+  FOR EACH ROW
+BEGIN
+  DECLARE tmp, porta_type, portb_type, count INTEGER;
+  IF NEW.porta = NEW.portb THEN
+    SET NEW.porta = NULL;
   END IF; 
   SELECT type INTO porta_type FROM Port WHERE id = NEW.porta;
   SELECT type INTO portb_type FROM Port WHERE id = NEW.portb;
@@ -1193,9 +1214,10 @@ END";
 		$query[] = "CREATE TRIGGER `checkPortCompatBeforeDelete` BEFORE DELETE ON `PortCompat`
   FOR EACH ROW
 BEGIN
-  DECLARE count INTEGER;
-  SELECT COUNT(*) INTO count FROM Link LEFT JOIN Port AS PortA ON Link.porta = PortA.id LEFT JOIN Port AS PortB ON Link.portb = PortB.id WHERE (PortA.type = OLD.type1 AND PortB.type = OLD.type2) OR (PortA.type = OLD.type2 AND PortB.type = OLD.type1);
-  IF count > 0 THEN
+  DECLARE l2count, l1count INTEGER;
+  SELECT COUNT(*) INTO l2count FROM Link LEFT JOIN Port AS PortA ON Link.porta = PortA.id LEFT JOIN Port AS PortB ON Link.portb = PortB.id WHERE (PortA.type = OLD.type1 AND PortB.type = OLD.type2) OR (PortA.type = OLD.type2 AND PortB.type = OLD.type1);
+  SELECT COUNT(*) INTO l1count FROM L1Link LEFT JOIN Port AS PortA ON L1Link.porta = PortA.id LEFT JOIN Port AS PortB ON L1Link.portb = PortB.id WHERE (PortA.type = OLD.type1 AND PortB.type = OLD.type2) OR (PortA.type = OLD.type2 AND PortB.type = OLD.type1);
+  IF l2count + l1count > 0 THEN
     UPDATE `Cannot delete: rule still used` SET x = 1;
   END IF;
 END";
@@ -1203,9 +1225,10 @@ END";
 		$query[] = "CREATE TRIGGER `checkPortCompatBeforeUpdate` BEFORE UPDATE ON `PortCompat`
   FOR EACH ROW
 BEGIN
-  DECLARE count INTEGER;
-  SELECT COUNT(*) INTO count FROM Link LEFT JOIN Port AS PortA ON Link.porta = PortA.id LEFT JOIN Port AS PortB ON Link.portb = PortB.id WHERE (PortA.type = OLD.type1 AND PortB.type = OLD.type2) OR (PortA.type = OLD.type2 AND PortB.type = OLD.type1);
-  IF count > 0 THEN
+  DECLARE l2count, l1count INTEGER;
+  SELECT COUNT(*) INTO l2count FROM Link LEFT JOIN Port AS PortA ON Link.porta = PortA.id LEFT JOIN Port AS PortB ON Link.portb = PortB.id WHERE (PortA.type = OLD.type1 AND PortB.type = OLD.type2) OR (PortA.type = OLD.type2 AND PortB.type = OLD.type1);
+  SELECT COUNT(*) INTO l1count FROM L1Link LEFT JOIN Port AS PortA ON L1Link.porta = PortA.id LEFT JOIN Port AS PortB ON L1Link.portb = PortB.id WHERE (PortA.type = OLD.type1 AND PortB.type = OLD.type2) OR (PortA.type = OLD.type2 AND PortB.type = OLD.type1);
+  IF l2count + l1count > 0 THEN
     UPDATE `Cannot update: rule still used` SET x = 1;
   END IF;
 END";
@@ -1749,8 +1772,8 @@ WHERE O.objtype_id = 1562";
 ('TAGS_QUICKLIST_SIZE','20','uint','no','no','yes','Tags quick list size'),
 ('TAGS_QUICKLIST_THRESHOLD','50','uint','yes','no','yes','Tags quick list threshold'),
 ('ENABLE_MULTIPORT_FORM','no','string','no','no','yes','Enable \"Add/update multiple ports\" form'),
-('DEFAULT_PORT_IIF_ID','1','uint','no','no','no','Default port inner interface ID'),
-('DEFAULT_PORT_OIF_IDS','1=24; 3=1078; 4=1077; 5=1079; 6=1080; 8=1082; 9=1084; 10=1588; 11=1668','string','no','no','no','Default port outer interface IDs'),
+('DEFAULT_PORT_IIF_ID','0;1','string','no','no','no','Default port inner interface IDs'),
+('DEFAULT_PORT_OIF_IDS','0=50000; 1=24; 3=1078; 4=1077; 5=1079; 6=1080; 8=1082; 9=1084; 10=1588; 11=1668','string','no','no','no','Default port outer interface IDs'),
 ('IPV4_TREE_RTR_AS_CELL','no','string','no','no','yes','Show full router info for each network in IPv4 tree view'),
 ('PROXIMITY_RANGE','0','uint','yes','no','yes','Proximity range (0 is current rack only)'),
 ('VLANSWITCH_LISTSRC', '', 'string', 'yes', 'no', 'yes', 'List of VLAN running switches'),

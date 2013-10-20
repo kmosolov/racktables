@@ -92,7 +92,10 @@ INNER JOIN (
 
 	// don't allow already linked ports
 	if (!$filter['linked'])
+	{
 		$query .= "AND p.id NOT IN (SELECT porta FROM Link) AND p.id NOT IN (SELECT portb FROM Link) ";
+		$query .= "AND p.id NOT IN (SELECT porta FROM L1Link) AND p.id NOT IN (SELECT portb FROM L1Link) ";
+	}
 
 	// rack filter
 	if (! empty ($filter['racks']))
@@ -123,6 +126,9 @@ INNER JOIN (
 		$query .= 'AND p.name LIKE ? ';
 		$qparams[] = '%' . $filter['ports'] . '%';
 	}
+	// L1 port type filter
+	if ($filter['l1_only'])
+		$query .= 'AND p.iif_id = 0';
 	// ordering
 	$query .= ' ORDER BY o.name';
 
@@ -409,6 +415,7 @@ function renderPopupPortSelector()
 	$port_info = getPortInfo ($port_id);
 	$in_rack = isCheckSet ('in_rack');
 	$linked = isCheckSet ('linked');
+	$l1_only = $port_info['iif_id'] != 0 && $port_info['linked'];
 
 	// fill port filter structure
 	$filter = array
@@ -417,7 +424,8 @@ function renderPopupPortSelector()
 		'objects' => '',
 		'ports' => '',
 		'asset_no' => '',
-		'linked' => $linked
+		'linked' => $linked,
+		'l1_only' => $l1_only,
 	);
 	if (isset ($_REQUEST['filter-obj']))
 		$filter['objects'] = trim($_REQUEST['filter-obj']);
@@ -466,6 +474,8 @@ function renderPopupPortSelector()
 
 	// display results
 	startPortlet ('Compatible spare ports');
+	if ($l1_only)
+		echo '<p><i>Port is already L2-linked, so only an L1 link could be enstablished</i></p>';
 	if (empty ($spare_ports))
 		echo '(nothing found)';
 	else
@@ -696,16 +706,16 @@ function renderPopupHTML()
 			break;
 		case 'portlist':
 		case 'patchpanellist':
-			$target = ($_REQUEST['helper'] == 'portlist') ? 'Port' : 'PatchPanel';
 			$pageno = 'depot';
 			$tabno = 'default';
 			fixContext();
 			assertPermission();
 			$text .= '<div style="background-color: #f0f0f0; border: 1px solid #3c78b5; padding: 10px; height: 100%; text-align: center; margin: 5px;">';
+			$do_pp = ($_REQUEST['helper'] == 'patchpanellist');
 			if (isset ($_REQUEST['do_link']))
-				$text .= getOutputOf ('callHook', "handlePopup${target}Link");
+				$text .= getOutputOf ('callHook', $do_pp ? 'handlePopupPatchPanelLink' : 'handlePopupPortLink');
 			else
-				$text .= getOutputOf ('callHook' , "renderPopup${target}Selector");
+				$text .= getOutputOf ('callHook' ,$do_pp ? 'renderPopupPatchPanelSelector' : 'renderPopupPortSelector');
 			$text .= '</div>';
 			break;
 		case 'traceroute':
