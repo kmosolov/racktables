@@ -1204,10 +1204,9 @@ function renderObjectPortRow ($port, $is_highlighted)
 	$sep = '';
 
 	$cableid_editable = permitted ('object', 'ports', 'editPort')? 'editable' : '';
-	// display port reservation comment
+	// display an L2 link, if persists
 	if ($port['linked'])
 	{
-		// display an L2 link, if persist
 		echo $sep;
 		$sep = $separator;
 		$linkinfo = $port;
@@ -1232,7 +1231,6 @@ function renderObjectPortRow ($port, $is_highlighted)
 			echo '<td class=tdleft>'.formatLoggedSpan ($port['last_log'], ($linkinfo['remote_object_id'] == $port['object_id'] ? 'loopback' : formatPortLink ($linkinfo['remote_object_id'], $linkinfo['remote_object_name'], $linkinfo['remote_id'], NULL))).'</td>';
 			echo '<td class=tdleft>'.formatLoggedSpan ($port['last_log'], $linkinfo['remote_name'], 'underline').$trace_link.'</td>';
 			echo "<td class=tdleft><span class='rsvtext $cableid_editable id-".$linkinfo['link_id']." op-upd-link-cableid'>".$linkinfo['cableid'].'</span></td>';
-			$trace_link = ''; // display trace link only once
 		}
 	}
 
@@ -1630,10 +1628,15 @@ function renderPortsForObject ($object_id)
 		for ($i = 0; $i < count ($links); $i++)
 		{
 			$port = $links[$i];
-			if ($port['linked'] === 'L1')
-				printOpFormIntro ('editLink', array ('link_id' => $port['link_id']));
+			if ($first_row)
+			{
+				$params = array ('port_id' => $port['id']);
+				if ($port['linked'] === 'L1')
+					$params['link_id'] = $port['link_id'];
+				printOpFormIntro ('editPort', $params);
+			}
 			else
-				printOpFormIntro ('editPort', array ('port_id' => $port['id']));
+				printOpFormIntro ('editLink', array ('link_id' => $port['link_id']));
 			echo "<tr $tr_class>";
 
 			if ($port['linked'] === 'L1' && !$first_row)
@@ -1681,22 +1684,17 @@ function renderPortsForObject ($object_id)
 			echo '<td>';
 			if ($first_row && $port['linked'] !== 'L2' && $reserved)
 				echo '<input type=text name=reservation_comment value="' . htmlspecialchars ($port['reservation_comment'], ENT_QUOTES) . '">';
-			else
+			elseif ($port['linked'])
 			{
-				if ($first_row)
-					echo '<input type=hidden name=reservation_comment value="">';
-				if ($port['linked'])
-				{
-					echo '&nbsp;' . formatLoggedSpan ($port['last_log'], $port['remote_name'], 'underline');
-					if ($port['linked'] === 'L1')
-						echo '&nbsp;' . getPopupLink ('traceroute', array ('port' => $port['id']), 'findlink', 'find', '', 'Trace this port');
-				}
+				echo '&nbsp;' . formatLoggedSpan ($port['last_log'], $port['remote_name'], 'underline');
+				if ($port['linked'] === 'L1')
+					echo '&nbsp;' . getPopupLink ('traceroute', array ('port' => $port['id']), 'findlink', 'find', '', 'Trace this port');
 			}
 			echo '</td>';
 
 			// 8. Cable id
 			echo '<td>';
-			if ($port['linked'])
+			if ($port['linked'] && ! ($first_row && $port['linked'] !== 'L2'))
 				echo '<input type=text name=cable value="' . htmlspecialchars ($port['cableid'], ENT_QUOTES) . '">';
 			echo '</td>';
 
@@ -1710,6 +1708,8 @@ function renderPortsForObject ($object_id)
 				echo getOpLink (array ('op'=>'unlinkPort', 'port_id'=>$port['id'], 'link_id'=>$port['link_id']), '', 'cut', 'Unlink this port');
 			if ($first_row && $port['linked'] !== 'L2' && !$reserved)
 				echo '<input type=text name=reservation_comment>';
+			elseif (! ($first_row && $port['linked'] !== 'L2' && $reserved))
+				echo '<input type=hidden name=reservation_comment value="">';
 			echo '</td>';
 
 			// 10. add/save port button

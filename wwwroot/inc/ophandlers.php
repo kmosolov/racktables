@@ -754,7 +754,12 @@ function editPortForObject ()
 	genericAssertion ('name', 'string');
 	commitUpdatePort ($sic['object_id'], $sic['port_id'], $sic['name'], $sic['port_type_id'], $sic['label'], $sic['l2address'], $sic['reservation_comment']);
 	if (array_key_exists ('cable', $_REQUEST))
-		commitUpdatePortLink ($sic['port_id'], $sic['cable']);
+	{
+		if (isset ($_REQUEST['link_id']))
+			commitUpdateL1Link ($sic['link_id'], $sic['cable']);
+		else
+			commitUpdatePortLink ($sic['port_id'], $sic['cable']);
+	}
 
 	return showFuncMessage (__FUNCTION__, 'OK', array ($_REQUEST['name']));
 }

@@ -1155,13 +1155,15 @@ function get_pseudo_file ($name)
   FOR EACH ROW
 BEGIN
   DECLARE tmp, porta_type, portb_type, count INTEGER;
-  IF NEW.porta = NEW.portb THEN
-    SET NEW.porta = NULL;
-  END IF; 
+  IF NEW.porta > NEW.portb THEN
+    SET tmp = NEW.porta;
+    SET NEW.porta = NEW.portb;
+    SET NEW.portb = tmp;
+  END IF;
   SELECT type INTO porta_type FROM Port WHERE id = NEW.porta;
   SELECT type INTO portb_type FROM Port WHERE id = NEW.portb;
   SELECT COUNT(*) INTO count FROM PortCompat WHERE (type1 = porta_type AND type2 = portb_type) OR (type1 = portb_type AND type2 = porta_type);
-  IF count = 0 THEN
+  IF NEW.porta = NEW.portb OR NEW.porta = 0 OR  NEW.portb = 0 OR count = 0 THEN
     SET NEW.porta = NULL;
   END IF;
 END";
@@ -1170,13 +1172,15 @@ END";
   FOR EACH ROW
 BEGIN
   DECLARE tmp, porta_type, portb_type, count INTEGER;
-  IF NEW.porta = NEW.portb THEN
-    SET NEW.porta = NULL;
-  END IF; 
+  IF NEW.porta > NEW.portb THEN
+    SET tmp = NEW.porta;
+    SET NEW.porta = NEW.portb;
+    SET NEW.portb = tmp;
+  END IF;
   SELECT type INTO porta_type FROM Port WHERE id = NEW.porta;
   SELECT type INTO portb_type FROM Port WHERE id = NEW.portb;
   SELECT COUNT(*) INTO count FROM PortCompat WHERE (type1 = porta_type AND type2 = portb_type) OR (type1 = portb_type AND type2 = porta_type);
-  IF count = 0 THEN
+  IF NEW.porta = NEW.portb OR NEW.porta <> 0 AND  NEW.portb <> 0 OR count = 0 THEN
     SET NEW.porta = NULL;
   END IF;
 END";
@@ -1185,13 +1189,15 @@ END";
   FOR EACH ROW
 BEGIN
   DECLARE tmp, porta_type, portb_type, count INTEGER;
-  IF NEW.porta = NEW.portb THEN
-    SET NEW.porta = NULL;
-  END IF; 
+  IF NEW.porta > NEW.portb THEN
+    SET tmp = NEW.porta;
+    SET NEW.porta = NEW.portb;
+    SET NEW.portb = tmp;
+  END IF;
   SELECT type INTO porta_type FROM Port WHERE id = NEW.porta;
   SELECT type INTO portb_type FROM Port WHERE id = NEW.portb;
   SELECT COUNT(*) INTO count FROM PortCompat WHERE (type1 = porta_type AND type2 = portb_type) OR (type1 = portb_type AND type2 = porta_type);
-  IF count = 0 THEN
+  IF NEW.porta = NEW.portb OR NEW.porta = 0 OR  NEW.portb = 0 OR count = 0 THEN
     SET NEW.porta = NULL;
   END IF;
 END";
@@ -1200,13 +1206,15 @@ END";
   FOR EACH ROW
 BEGIN
   DECLARE tmp, porta_type, portb_type, count INTEGER;
-  IF NEW.porta = NEW.portb THEN
-    SET NEW.porta = NULL;
-  END IF; 
+  IF NEW.porta > NEW.portb THEN
+    SET tmp = NEW.porta;
+    SET NEW.porta = NEW.portb;
+    SET NEW.portb = tmp;
+  END IF;
   SELECT type INTO porta_type FROM Port WHERE id = NEW.porta;
   SELECT type INTO portb_type FROM Port WHERE id = NEW.portb;
   SELECT COUNT(*) INTO count FROM PortCompat WHERE (type1 = porta_type AND type2 = portb_type) OR (type1 = portb_type AND type2 = porta_type);
-  IF count = 0 THEN
+  IF NEW.porta = NEW.portb OR NEW.porta = 0 OR  NEW.portb = 0 OR count = 0 THEN
     SET NEW.porta = NULL;
   END IF;
 END";
