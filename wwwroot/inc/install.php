@@ -1114,6 +1114,7 @@ CREATE TABLE `VSEnabledIPs` (
   KEY `vip` (`vip`),
   KEY `VSEnabledIPs-FK-vs_id-vip` (`vs_id`,`vip`),
   KEY `VSEnabledIPs-FK-rspool_id` (`rspool_id`),
+  CONSTRAINT `VSEnabledIPs-FK-object_id` FOREIGN KEY (`object_id`) REFERENCES `Object` (`id`) ON DELETE CASCADE,
   CONSTRAINT `VSEnabledIPs-FK-rspool_id` FOREIGN KEY (`rspool_id`) REFERENCES `IPv4RSPool` (`id`) ON DELETE CASCADE,
   CONSTRAINT `VSEnabledIPs-FK-vs_id-vip` FOREIGN KEY (`vs_id`, `vip`) REFERENCES `VSIPs` (`vs_id`, `vip`) ON DELETE CASCADE
 ) ENGINE=InnoDB;
