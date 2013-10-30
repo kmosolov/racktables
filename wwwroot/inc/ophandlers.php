@@ -109,11 +109,11 @@ $opspec_list['object-ports-deleteAll'] = array
 );
 $opspec_list['object-ports-editLink'] = array
 (
-	'table' => 'L1Link',
+	'table' => 'Link',
 	'action' => 'UPDATE',
 	'set_arglist' => array
 	(
-		array ('url_argname' => 'cable', 'assertion' => 'string0'),
+		array ('url_argname' => 'cable', 'assertion' => 'stringN'),
 	),
 	'where_arglist' => array
 	(
@@ -313,26 +313,6 @@ $opspec_list['parentmap-edit-del'] = array
 	(
 		array ('url_argname' => 'parent_objtype_id', 'assertion' => 'uint'),
 		array ('url_argname' => 'child_objtype_id', 'assertion' => 'uint'),
-	),
-);
-$opspec_list['portmap-edit-add'] = array
-(
-	'table' => 'PortCompat',
-	'action' => 'INSERT',
-	'arglist' => array
-	(
-		array ('url_argname' => 'type1', 'assertion' => 'uint'),
-		array ('url_argname' => 'type2', 'assertion' => 'uint'),
-	),
-);
-$opspec_list['portmap-edit-del'] = array
-(
-	'table' => 'PortCompat',
-	'action' => 'DELETE',
-	'arglist' => array
-	(
-		array ('url_argname' => 'type1', 'assertion' => 'uint'),
-		array ('url_argname' => 'type2', 'assertion' => 'uint'),
 	),
 );
 $opspec_list['portifcompat-edit-del'] = array
@@ -753,25 +733,8 @@ function editPortForObject ()
 	genericAssertion ('l2address', 'l2address0');
 	genericAssertion ('name', 'string');
 	commitUpdatePort ($sic['object_id'], $sic['port_id'], $sic['name'], $sic['port_type_id'], $sic['label'], $sic['l2address'], $sic['reservation_comment']);
-	if (array_key_exists ('cable', $_REQUEST))
-	{
-		if (isset ($_REQUEST['link_id']))
-			commitUpdateL1Link ($sic['link_id'], $sic['cable']);
-		else
-			commitUpdatePortLink ($sic['port_id'], $sic['cable']);
-	}
-
-	return showFuncMessage (__FUNCTION__, 'OK', array ($_REQUEST['name']));
-}
-
-$msgcode['editL1Link']['OK'] = 6;
-function editL1Link ()
-{
-	global $sic;
-	assertUIntArg ('link_id');
-	assertStringArg ('cable', TRUE);
-	commitUpdateL1Link ($sic['link_id'], $sic['cable']);
-
+	if (array_key_exists('link_id', $_REQUEST) && array_key_exists ('cable', $_REQUEST))
+		commitUpdatePortLink (assertUIntArg ('link_id'), assertStringArg ('cable', TRUE));
 	return showFuncMessage (__FUNCTION__, 'OK', array ($_REQUEST['name']));
 }
 
@@ -2554,6 +2517,22 @@ function addIIFOIFCompatPack ()
 	return showFuncMessage (__FUNCTION__, 'OK', array ($ngood));
 }
 
+function addOIFCompat ()
+{
+	$type1 = assertUIntArg ('type1');
+	$type2 = assertUIntArg ('type2');
+	$n_changed = addPortOIFCompat ($type1, $type2);
+	showSuccess ("$n_changed row(s) added");
+}
+
+function delOIFCompat ()
+{
+	$type1 = assertUIntArg ('type1');
+	$type2 = assertUIntArg ('type2');
+	$n_changed = deletePortOIFCompat ($type1, $type2);
+	showSuccess ("$n_changed row(s) deleted");
+}
+
 $msgcode['delIIFOIFCompatPack']['OK'] = 38;
 function delIIFOIFCompatPack ()
 {
@@ -2573,12 +2552,13 @@ $msgcode['addOIFCompatPack']['OK'] = 21;
 function addOIFCompatPack ()
 {
 	genericAssertion ('standard', 'enum/wdmstd');
-	global $wdm_packs;
+	global $wdm_packs, $dbxlink;
 	$oifs = $wdm_packs[$_REQUEST['standard']]['oif_ids'];
+	$dbxlink->beginTransaction();
 	foreach ($oifs as $oif_id_1)
 	{
 		$args = $qmarks = array();
-		$query = 'REPLACE INTO PortCompat (type1, type2) VALUES ';
+		$query = 'INSERT IGNORE INTO PortCompat (type1, type2) VALUES ';
 		foreach ($oifs as $oif_id_2)
 		{
 			$qmarks[] = '(?, ?)';
@@ -2588,6 +2568,7 @@ function addOIFCompatPack ()
 		$query .= implode (', ', $qmarks);
 		usePreparedExecuteBlade ($query, $args);
 	}
+	$dbxlink->commit();
 	return showFuncMessage (__FUNCTION__, 'OK');
 }
 
@@ -2595,12 +2576,14 @@ $msgcode['delOIFCompatPack']['OK'] = 21;
 function delOIFCompatPack ()
 {
 	genericAssertion ('standard', 'enum/wdmstd');
-	global $wdm_packs;
+	global $wdm_packs, $dbxlink;
 	$oifs = $wdm_packs[$_REQUEST['standard']]['oif_ids'];
+	$dbxlink->beginTransaction();
 	foreach ($oifs as $oif_id_1)
 		foreach ($oifs as $oif_id_2)
 			if ($oif_id_1 != $oif_id_2) # leave narrow-band mapping intact
 				usePreparedDeleteBlade ('PortCompat', array ('type1' => $oif_id_1, 'type2' => $oif_id_2));
+	$dbxlink->commit();
 	return showFuncMessage (__FUNCTION__, 'OK');
 }
 
@@ -3209,13 +3192,9 @@ function getOpspec()
 
 function unlinkPort ()
 {
-	$port_id = assertUIntArg ('port_id');
-	$link_id = NULL;
-	if (! empty ($_REQUEST['link_id']))
-		$link_id = assertUIntArg ('link_id');
-
-	if (commitUnlinkPort ($port_id, $link_id))
-		showSuccess ('Port unlinked successfully');
+	assertUIntArg ('link_id');
+	commitUnlinkPort ($_REQUEST['link_id']);
+	showSuccess ('Port unlinked successfully');
 }
 
 function clearVlan()

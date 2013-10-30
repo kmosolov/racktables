@@ -92,10 +92,7 @@ INNER JOIN (
 
 	// don't allow already linked ports
 	if (!$filter['linked'])
-	{
 		$query .= "AND p.id NOT IN (SELECT porta FROM Link) AND p.id NOT IN (SELECT portb FROM Link) ";
-		$query .= "AND p.id NOT IN (SELECT porta FROM L1Link) AND p.id NOT IN (SELECT portb FROM L1Link) ";
-	}
 
 	// rack filter
 	if (! empty ($filter['racks']))
@@ -605,8 +602,8 @@ function renderPopupTraceRoute ()
 		amplifyCell ($object);
 		$title = 'Tracing all ports of ' . $object['dname'];
 		$port_data = array ();
-		foreach ($object['ports'] as $port_id => $port_details)
-			$port_data = $port_data + getNeighborPorts ($port_id);
+		foreach ($object['ports'] as $portinfo)
+			$port_data += getNeighborPorts ($portinfo['id']);
 	}
 	else
 	{
