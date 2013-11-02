@@ -28,7 +28,7 @@ $(document).ready (function() {
 	});
 	$('body').mouseover(onBodyMouseOver);
 
-    $('.ping').html("<img src=pix/ping.png valign=top>");
+    $('.ping').html("<img src=pix/link-down.png valign=top>");
     $('#pingall').click(function() {
         $('.ping').each(function() {
             pingHost(this.id);
@@ -46,20 +46,22 @@ $(document).ready (function() {
 function pingHost (ip) {
     var jqxhr = $.ajax({
         type: "POST",
-        url: "ping.php",
-        data: { host: ip },
+        url: "index.php",
+        data: {
+            'module': 'ajax',
+            'ac': 'ping-ipv4',
+            host: ip
+            },
         success: (function(data) {
-//            var select='#'+ip;
-//            alert(select);
-//            $('#192\.168\.101\.21').hide();
             if (data == 0) {
-                $('a.ping[ip="' + ip + '"]').html("<img src=pix/green.png valign=top>");
+                // Host is available
+                $('a.ping[ip="' + ip + '"]').html("<img src=pix/link-up.png valign=top>");
             }
             else {
-                $('a.ping[ip="' + ip + '"]').html("<img src=pix/red.png valign=top>");
+                // Host is not available
+                $('a.ping[ip="' + ip + '"]').html("<img src=pix/link-disabled.png valign=top>");
             }
 
-//            alert(ip+data);
         })
     })
 
