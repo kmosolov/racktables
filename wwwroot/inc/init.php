@@ -25,6 +25,7 @@ require_once 'remote.php';
 require_once 'caching.php';
 require_once 'slb.php';
 require_once 'slbv2.php';
+require_once 'cablingplan.php';
 
 // secret.php may be missing, in which case this is a special fatal error
 if (! fileSearchExists ($path_to_secret_php))
