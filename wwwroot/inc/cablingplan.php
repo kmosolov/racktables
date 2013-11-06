@@ -27,14 +27,20 @@ $tabhandler['cablingplan']['default'] = 'showCablingPlan';
 $tabhandler['cablingplan']['defaultgroup'] = 'showCablingPlanGroup';
 $tabhandler['cablingplan']['defaultsvg'] = 'showCablingPlanSvg';
 
-$image['cablingplan']['path'] = 'pix/cablingplan.png';
-$image['cablingplan']['width'] = 218;
-$image['cablingplan']['height'] = 200;
+$image['cablingplan']['path'] = 'pix/mainmenu/cablingplan.png';
+$image['cablingplan']['width'] = 128;
+$image['cablingplan']['height'] = 128;
 
 function showCablingPlan()
 {
 	// Show cabling plan image
 	echo "<img hspace='15' vspace='15' src='?module=rendercablingplan&format=png' />\n";
+}
+
+function showCablingPlanGroup()
+{
+    // Show cabling plan image
+    echo "<img hspace='5' vspace='5' src='?module=rendercablingplan&format=png&grouping=1' />\n";
 }
 
 function showCablingPlanSvg()
@@ -43,11 +49,7 @@ function showCablingPlanSvg()
 	echo "<img hspace='10' vspace='10' src='?module=rendercablingplan&format=svg' />\n";
 }
 
-function showCablingPlanGroup()
-{
-	// Show cabling plan image
-	echo "<img hspace='5' vspace='5' src='?module=rendercablingplan&format=png&grouping=1' />\n";
-}
+
 
 function renderCablingPlan()
 {
