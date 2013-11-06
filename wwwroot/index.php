@@ -275,7 +275,10 @@ try {
 		require_once 'inc/install.php';
 		renderInstallerHTML();
 		break;
-
+	case 'rendercablingplan':
+		require_once 'inc/init.php';
+		renderCablingPlan();
+		break;
 	default:
 		throw new InvalidRequestArgException ('module', $requestedModule);
 	}
