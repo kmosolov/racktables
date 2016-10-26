@@ -18,6 +18,7 @@ $breedfunc = array
 	'ios12-get8021q-readvlan'  => 'ios12PickVLANCommand',
 	'ios12-getportstatus-main' => 'ciscoReadInterfaceStatus',
 	'ios12-getmaclist-main'    => 'ios12ReadMacList',
+	'ios12-getportmaclist-main'=> 'ios12ReadMacList',
 	'ios12-xlatepushq-main'    => 'ios12TranslatePushQueue',
 	'ios12-getallconf-main'    => 'ios12SpotConfigText',
 	'fdry5-get8021q-main'      => 'fdry5ReadVLANConfig',
@@ -26,24 +27,30 @@ $breedfunc = array
 	'fdry5-get8021q-readport'  => 'fdry5PickInterfaceSubcommand',
 	'fdry5-xlatepushq-main'    => 'fdry5TranslatePushQueue',
 	'fdry5-getallconf-main'    => 'fdry5SpotConfigText',
+	'fdry5-getportstatus-main' => 'foundryReadInterfaceStatus',
+	'fdry5-getmaclist-main'    => 'fdry5ReadMacList',
+	'fdry5-getportmaclist-main'=> 'fdry5ReadMacList',
 	'vrp53-getlldpstatus-main' => 'vrpReadLLDPStatus',
 	'vrp53-get8021q-main'      => 'vrp53ReadVLANConfig',
 	'vrp53-get8021q-top'       => 'vrp53ScanTopLevel',
 	'vrp53-get8021q-readport'  => 'vrp53PickInterfaceSubcommand',
 	'vrp53-getportstatus-main' => 'vrpReadInterfaceStatus',
 	'vrp53-getmaclist-main'    => 'vrp53ReadMacList',
+	'vrp53-getportmaclist-main'=> 'vrp53ReadMacList',
 	'vrp53-xlatepushq-main'    => 'vrp53TranslatePushQueue',
 	'vrp53-getallconf-main'    => 'vrpSpotConfigText',
 	'vrp55-getlldpstatus-main' => 'vrpReadLLDPStatus',
 	'vrp55-get8021q-main'      => 'vrp55Read8021QConfig',
 	'vrp55-getportstatus-main' => 'vrpReadInterfaceStatus',
 	'vrp55-getmaclist-main'    => 'vrpReadMacList',
+	'vrp55-getportmaclist-main'=> 'vrpReadMacList',
 	'vrp55-xlatepushq-main'    => 'vrp55TranslatePushQueue',
 	'vrp55-getallconf-main'    => 'vrpSpotConfigText',
 	'vrp85-getlldpstatus-main' => 'vrpReadLLDPStatus',
 	'vrp85-get8021q-main'      => 'vrp85Read8021QConfig',
 	'vrp85-getportstatus-main' => 'vrpReadInterfaceStatus',
 	'vrp85-getmaclist-main'    => 'vrpReadMacList',
+	'vrp85-getportmaclist-main'=> 'vrpReadMacList',
 	'vrp85-xlatepushq-main'    => 'vrp85TranslatePushQueue',
 	'vrp85-getallconf-main'    => 'vrpSpotConfigText',
 	'nxos4-getcdpstatus-main'  => 'ios12ReadCDPStatus',
@@ -51,6 +58,7 @@ $breedfunc = array
 	'nxos4-get8021q-main'      => 'ios12ReadVLANConfig',
 	'nxos4-getportstatus-main' => 'ciscoReadInterfaceStatus',
 	'nxos4-getmaclist-main'    => 'nxos4ReadMacList',
+	'nxos4-getportmaclist-main'=> 'nxos4ReadMacList',
 	'nxos4-xlatepushq-main'    => 'nxos4TranslatePushQueue',
 	'nxos4-getallconf-main'    => 'nxos4SpotConfigText',
 	'dlink-get8021q-main'      => 'dlinkReadVLANConfig',
@@ -58,29 +66,38 @@ $breedfunc = array
 	'dlink-get8021q-pickvlan'  => 'dlinkPickVLANCommand',
 	'dlink-getportstatus-main' => 'dlinkReadInterfaceStatus',
 	'dlink-getmaclist-main'    => 'dlinkReadMacList',
+	'dlink-getportmaclist-main'=> 'dlinkReadMacList',
 	'dlink-xlatepushq-main'    => 'dlinkTranslatePushQueue',
 	'linux-get8021q-main'      => 'linuxReadVLANConfig',
 	'linux-getportstatus-main' => 'linuxReadInterfaceStatus',
 	'linux-getmaclist-main'    => 'linuxReadMacList',
+	'linux-getportmaclist-main'=> 'linuxReadMacList',
 	'linux-xlatepushq-main'    => 'linuxTranslatePushQueue',
 	'xos12-getlldpstatus-main' => 'xos12ReadLLDPStatus',
 	'xos12-get8021q-main'      => 'xos12Read8021QConfig',
 	'xos12-xlatepushq-main'    => 'xos12TranslatePushQueue',
 	'xos12-getallconf-main'    => 'xos12SpotConfigText',
+	'xos12-getportstatus-main' => 'xos12ReadInterfaceStatus',
+	'xos12-getmaclist-main'    => 'xos12ReadMacList',
+	'xos12-getportmaclist-main' => 'xos12ReadMacList',
 	'jun10-get8021q-main'      => 'jun10Read8021QConfig',
 	'jun10-xlatepushq-main'    => 'jun10TranslatePushQueue',
 	'jun10-getallconf-main'    => 'jun10SpotConfigText',
 	'jun10-getlldpstatus-main' => 'jun10ReadLLDPStatus',
+	'jun10-getportstatus-main' => 'jun10ReadInterfaceStatus',
 	'ftos8-xlatepushq-main'    => 'ftos8TranslatePushQueue',
 	'ftos8-getlldpstatus-main' => 'ftos8ReadLLDPStatus',
 	'ftos8-getmaclist-main'    => 'ftos8ReadMacList',
+	'ftos8-getportmaclist-main'=> 'ftos8ReadMacList',
 	'ftos8-getportstatus-main' => 'ftos8ReadInterfaceStatus',
 	'ftos8-get8021q-main'      => 'ftos8Read8021QConfig',
 	'ftos8-getallconf-main'    => 'ftos8SpotConfigText',
 	'air12-xlatepushq-main'    => 'air12TranslatePushQueue',
 	'air12-getallconf-main'    => 'ios12SpotConfigText',
+	'air12-getcdpstatus-main'  => 'ios12ReadCDPStatus',
 	'eos4-getallconf-main'     => 'eos4SpotConfigText',
 	'eos4-getmaclist-main'     => 'eos4ReadMacList',
+	'eos4-getportmaclist-main' => 'eos4ReadMacList',
 	'eos4-getportstatus-main'  => 'eos4ReadInterfaceStatus',
 	'eos4-getlldpstatus-main'  => 'eos4ReadLLDPStatus',
 	'eos4-get8021q-main'       => 'eos4Read8021QConfig',
@@ -90,6 +107,7 @@ $breedfunc = array
 	'ros11-getlldpstatus-main' => 'ros11ReadLLDPStatus',
 	'ros11-getportstatus-main' => 'ros11ReadInterfaceStatus',
 	'ros11-getmaclist-main'    => 'ros11ReadMacList',
+	'ros11-getportmaclist-main'=> 'ros11ReadMacList',
 	'ros11-get8021q-main'      => 'ros11Read8021QConfig',
 	'ros11-get8021q-scantop'   => 'ros11Read8021QScanTop',
 	'ros11-get8021q-vlandb'    => 'ros11Read8021QVLANDatabase',
@@ -97,6 +115,7 @@ $breedfunc = array
 	'iosxr4-xlatepushq-main'   => 'iosxr4TranslatePushQueue',
 	'iosxr4-getallconf-main'   => 'iosxr4SpotConfigText',
 	'iosxr4-getlldpstatus-main'=> 'iosxr4ReadLLDPStatus',
+	'iosxr4-getportstatus-main'=> 'iosxr4ReadInterfaceStatus',
 	'ucs-xlatepushq-main'      => 'ucsTranslatePushQueue',
 	'ucs-getinventory-main'    => 'ucsReadInventory',
 );
@@ -116,6 +135,7 @@ $breed_by_swcode = array
 	1901 => 'ios12', // IOS 15.0
 	1963 => 'ios12', // IOS 15.1 (router OS)
 	2082 => 'ios12', // IOS 15.1
+	2142 => 'ios12', // IOS 15.2
 	963  => 'nxos4', // NX-OS 4.0
 	964  => 'nxos4', // NX-OS 4.1
 	1365 => 'nxos4', // NX-OS 4.2
@@ -132,10 +152,14 @@ $breed_by_swcode = array
 	2081 => 'vrp55', // Huawei VRP 5.12
 	2027 => 'vrp85', // Huawei VRP 8.5
 	1363 => 'fdry5', // IronWare 5
-	1367 => 'jun10', // 10S
-	1597 => 'jun10', // 10R
-	1598 => 'jun10', // 11R
-	1599 => 'jun10', // 12R
+	1364 => 'fdry5', // Brocade FastIron LS648
+	1367 => 'jun10', // JunOS 10, switch
+	1597 => 'jun10', // JunOS 10
+	1598 => 'jun10', // JunOS 11
+	1599 => 'jun10', // JunOS 12
+	2400 => 'jun10', // JunOS 13
+	2401 => 'jun10', // JunOS 14
+	2402 => 'jun10', // JunOS 15
 	1594 => 'ftos8', // Force10 FTOS 8
 	1673 => 'air12', // AIR IOS 12.3
 	1674 => 'air12', // AIR IOS 12.4
@@ -147,6 +171,7 @@ $breed_by_swcode = array
 );
 
 $breed_by_hwcode = array (
+	1362 => 'fdry5', // Brocade FastIron CX648
 	//... dlink items added by the loop below
 );
 
@@ -175,11 +200,11 @@ function detectDeviceBreed ($object_id)
 {
 	global $breed_by_swcode, $breed_by_hwcode, $breed_by_mgmtcode;
 	foreach (getAttrValues ($object_id) as $record)
-		if ($record['id'] == 4 and array_key_exists ($record['key'], $breed_by_swcode))
+		if ($record['id'] == 4 && array_key_exists ($record['key'], $breed_by_swcode))
 			return $breed_by_swcode[$record['key']];
-		elseif ($record['id'] == 2 and array_key_exists ($record['key'], $breed_by_hwcode))
+		elseif ($record['id'] == 2 && array_key_exists ($record['key'], $breed_by_hwcode))
 			return $breed_by_hwcode[$record['key']];
-		elseif ($record['id'] == 30 and array_key_exists ($record['key'], $breed_by_mgmtcode))
+		elseif ($record['id'] == 30 && array_key_exists ($record['key'], $breed_by_mgmtcode))
 			return $breed_by_mgmtcode[$record['key']];
 	return '';
 }
@@ -205,9 +230,20 @@ function assertBreedFunction ($breed, $command)
 	return $breedfunc["${breed}-${command}-main"];
 }
 
-function queryDevice ($object_id, $command)
+function queryDevice ($object_id, $command, $args = array())
 {
-	$query = translateDeviceCommands ($object_id, array (array ('opcode' => $command)));
+	$ret = NULL;
+	$request = array ('opcode' => $command);
+	if (is_array ($args) && count ($args))
+	{
+		$i = 1;
+		foreach ($args as $arg)
+		{
+			$request["arg$i"] = $arg;
+			$i++;
+		}
+	}
+	$query = translateDeviceCommands ($object_id, array ($request));
 	if ($command == 'xlatepushq')
 		return $query;
 	$breed = assertDeviceBreed ($object_id);
@@ -241,6 +277,8 @@ function queryDevice ($object_id, $command)
 
 	if (NULL !== ($subst = callHook ('alterDeviceQueryResult', $ret, $object_id, $command)))
 		$ret = $subst;
+	if (! isset ($ret))
+		throw new RTGatewayError ("No result from $command");
 	return $ret;
 }
 
@@ -286,6 +324,18 @@ function makeGatewayParams ($object_id, $tolerate_remote_errors, /*array(&)*/$re
 			$params_from_settings['connect-timeout'] = 'connect_timeout';
 			$params_from_settings['timeout'] = 'timeout';
 			$params_from_settings['prompt-delay'] = 'prompt_delay';
+			if (isset ($settings['proto']))
+				switch ($settings['proto'])
+				{
+					case 4:
+						$params_from_settings[] = '-4';
+						break;
+					case 6:
+						$params_from_settings[] = '-6';
+						break;
+					default:
+						throw new RTGatewayError ("Proto '${settings['proto']}' is invalid. Valid protocols are: '4', '6'");
+				}
 			$params_from_settings[] = $settings['hostname'];
 			break;
 		case 'netcat':
@@ -333,7 +383,7 @@ function makeGatewayParams ($object_id, $tolerate_remote_errors, /*array(&)*/$re
 			break;
 		case 'ucssdk': # remote XML through a Python backend
 			# UCS in its current implementation besides the terminal_settings() provides
-			# an additional username/password feed through the HTML from. Whenever the
+			# an additional username/password feed through the HTML form. Whenever the
 			# user provides the credentials through the form, use these instead of the
 			# credentials [supposedly] set by terminal_settings().
 			global $script_mode;
@@ -381,26 +431,32 @@ function queryTerminal ($object_id, $commands, $tolerate_remote_errors = TRUE)
 	if (count ($endpoints) > 1)
 		throw new RTGatewayError ('cannot pick management address');
 
+	$hide_warnings = FALSE;
+
 	// telnet prompt and mode specification
 	switch ($breed = detectDeviceBreed ($object_id))
 	{
 		case 'ios12':
+		case 'air12':
 		case 'ftos8':
 			$protocol = 'netcat'; // default is netcat mode
-			$prompt = '^(Login|[Uu]sername|Password): $|^\S+[>#]$|\[[^][]*\]\? $'; // set the prompt in case user would like to specify telnet protocol
-			$commands = "terminal length 0\nterminal no monitor\n" . $commands;
-			break;
-		case 'air12':
-			$protocol = 'telnet'; # Aironet IOS is broken
-			$prompt = '^(Username|Password): $|^\S+[>#]$';
+			if ($breed == 'air12')
+				$protocol = 'telnet'; # Aironet IOS is broken
+			$prompt = '^(Login|[Uu]sername|Password): $|^\S+[>#]$|\[[^][]*\]\? $|\?\s+\[[^][]*\]\s*$|\[confirm yes\/no\]: $'; // set the prompt in case user would like to specify telnet protocol
 			$commands = "terminal length 0\nterminal no monitor\n" . $commands;
 			break;
 		case 'fdry5':
 			$protocol = 'netcat'; // default is netcat mode
-			$prompt = '^(Login|Username|Password): $|^\S+[>#]$'; // set the prompt in case user would like to specify telnet protocol
+			$prompt = '^(Login|Username|Password|Please Enter Password): $|^\S+[>#]$'; // set the prompt in case user would like to specify telnet protocol
 			$commands = "skip-page-display\n" . $commands;
+			# using ssh and sshnokey we'll always receive 'Connection to $ip closed by remote host.' upon exit
+			# let's hide the warnings
+			$tolerate_remote_errors = TRUE;
+			$hide_warnings = TRUE;
 			break;
 		case 'vrp55':
+			$commands = "terminal echo-mode line\n" . $commands;
+			/* fall-through */
 		case 'vrp85':
 			$commands = "screen-length 0 temporary\n" . $commands;
 			/* fall-through */
@@ -476,23 +532,23 @@ function queryTerminal ($object_id, $commands, $tolerate_remote_errors = TRUE)
 	// call gateway
 	$ret_code = callScript ($settings['protocol'], $params, $commands, $out, $errors);
 
-	if ($settings['protocol'] != 'ssh' || ! $tolerate_remote_errors)
+	if (substr($settings['protocol'],0,3) != 'ssh' || ! $tolerate_remote_errors)
 	{
-		if (! empty ($errors))
+		if ($errors != '')
 			throw new RTGatewayError ("${settings['protocol']} error: " . rtrim ($errors));
 		elseif ($ret_code !== 0)
 			throw new RTGatewayError ("${settings['protocol']} error: result code $ret_code");
 	}
-	elseif (! empty ($errors)) // ssh and tolerate and non-empty $errors
+	elseif ($errors != '') // ssh and tolerate and non-empty $errors
 		foreach (explode ("\n", $errors) as $line)
-			if (strlen ($line))
+			if ($line != '' && ! $hide_warnings)
 				showWarning ("${settings['protocol']} ${settings['hostname']}: $line");
 	return strtr($out, array("\r" => "")); // cut ^M symbols
 }
 
 function callScript ($gwname, $params, $in, &$out, &$errors)
 {
-	global $racktables_gwdir, $local_gwdir, $gateway_log;
+	global $racktables_gwdir, $local_gwdir, $gateway_log, $script_child_res;
 	if (isset ($gateway_log))
 		$gateway_log = '';
 
@@ -542,6 +598,7 @@ function callScript ($gwname, $params, $in, &$out, &$errors)
 	);
 	if (! is_resource ($child))
 		throw new RTGatewayError ("cant execute $binary");
+	$script_child_res = $child;
 
 	$buff_size = 4096;
 	$write_left = array ($pipes[0]);
@@ -569,9 +626,7 @@ function callScript ($gwname, $params, $in, &$out, &$errors)
 			}
 		}
 		foreach ($read_fd as $fd)
-		{
-			$str = fread ($fd, $buff_size);
-			if (strlen ($str) == 0)
+			if ('' == $str = fread ($fd, $buff_size))
 			{
 				// close output fd
 				$read_left = array_diff ($read_left, array ($fd));
@@ -588,7 +643,6 @@ function callScript ($gwname, $params, $in, &$out, &$errors)
 				elseif ($fd == $pipes[2])
 					$errors .= $str;
 			}
-		}
 
 		$write_fd = $write_left;
 		$read_fd = $read_left;
@@ -598,7 +652,25 @@ function callScript ($gwname, $params, $in, &$out, &$errors)
 			$gateway_log = substr ($gateway_log, -MAX_GW_LOGSIZE);
 
 	}
+	// we need to destroy our global link to the resource here.
+	// PHP's proc_close implementation does nothing itself: it only returns
+	// the value saved by the resource destructor. If the resource was not
+	// destroyed (refcnt > 0), the return value is incorrect.
+	$script_child_res = NULL;
+
 	return proc_close ($child);
+}
+
+// returns the empty structure to be returned from getRunning8021QConfig
+function constructRunning8021QConfig()
+{
+	return array
+	(
+		'vlanlist' => array(),   // unindexed list of integer VIDs
+		'portdata' => array(),   // portconf structures indexed by portname
+		'portconfig' => array(), // config text lines indexed by portname.
+		'vlannames' => array(),  // vlan names indexed by VID
+	);
 }
 
 function getRunning8021QConfig ($object_id)
@@ -635,6 +707,10 @@ function setDevice8021QConfig ($object_id, $pseudocode, $vlan_names)
 // (i.e. some function in deviceconfig.php)
 function shortenIfName ($if_name, $breed = NULL, $object_id = NULL)
 {
+	// this is a port name we invented in snmp.php, do not translate it
+	if (preg_match ('/^AC-in(-[12])?$/', $if_name))
+		return $if_name;
+
 	global $current_query_breed;
 	if (! isset ($breed))
 	{
@@ -643,10 +719,13 @@ function shortenIfName ($if_name, $breed = NULL, $object_id = NULL)
 		elseif (isset ($current_query_breed))
 			$breed = $current_query_breed;
 	}
+
 	switch ($breed)
 	{
 		case 'ios12':
 			return ios12ShortenIfName_real ($if_name);
+		case 'nxos4':
+			return nxos4ShortenIfName ($if_name);
 		case 'vrp53':
 		case 'vrp55':
 			return vrp5xShortenIfName ($if_name);
@@ -667,6 +746,16 @@ function ios12ShortenIfName_real ($ifname)
 	$ifname = preg_replace ('@^port-channel(.+)$@i', 'po\\1', $ifname);
 	$ifname = strtolower ($ifname);
 	$ifname = preg_replace ('/^(fa|gi|te|po)\s+(\d.*)/', '$1$2', $ifname);
+	return $ifname;
+}
+
+function nxos4ShortenIfName ($ifname)
+{
+	$ifname = preg_replace ('@^(Ethernet|Eth)(.+)$@', 'e\\2', $ifname);
+	$ifname = preg_replace ('@^port-channel(.+)$@i', 'po\\1', $ifname);
+	$ifname = preg_replace ('@^mgmt(.+)$@i', 'mgmt\\1', $ifname);
+	$ifname = strtolower ($ifname);
+	$ifname = preg_replace ('/^(e|po|mgmt)\s+(\d.*)/', '$1$2', $ifname);
 	return $ifname;
 }
 
@@ -699,6 +788,7 @@ function iosxr4ShortenIfName ($ifname)
 	$ifname = preg_replace ('@^GigabitEthernet\s*(.+)$@', 'gi\\1', $ifname);
 	$ifname = preg_replace ('@^TenGigE\s*(.*)$@', 'te\\1', $ifname);
 	$ifname = preg_replace ('@^BE\s*(\d+)$@', 'bundle-ether\\1', $ifname);
+	$ifname = preg_replace ('@^HundredGigE\s*(.+)$@i', 'hu\\1', $ifname);
 	$ifname = strtolower ($ifname);
 	return $ifname;
 }
@@ -711,12 +801,12 @@ function ios12ShortenIfName ($ifname)
 		return "Eth-Trunk${m[1]}";
 	$ifname = preg_replace ('@^(?:[Ee]thernet|Eth)(.+)$@', 'e\\1', $ifname);
 	$ifname = preg_replace ('@^FastEthernet(.+)$@', 'fa\\1', $ifname);
-	$ifname = preg_replace ('@^(?:GigabitEthernet|GE)(.+)$@', 'gi\\1', $ifname);
+	$ifname = preg_replace ('@^(?:GigabitEthernet|GE)\s*(.+)$@', 'gi\\1', $ifname);
 	$ifname = preg_replace ('@^TenGigabitEthernet(.+)$@', 'te\\1', $ifname);
 	$ifname = preg_replace ('@^port-channel(.+)$@i', 'po\\1', $ifname);
 	$ifname = preg_replace ('@^(?:XGigabitEthernet|XGE)(.+)$@', 'xg\\1', $ifname);
 	$ifname = preg_replace ('@^LongReachEthernet(.+)$@', 'lo\\1', $ifname);
-	$ifname = preg_replace ('@^Management(.+)$@', 'ma\\1', $ifname);
+	$ifname = preg_replace ('@^Management(?:Ethernet)\s(.+)$@', 'ma\\1', $ifname);
 	$ifname = preg_replace ('@^Et(\d.*)$@', 'e\\1', $ifname);
 	$ifname = preg_replace ('@^TenGigE(.*)$@', 'te\\1', $ifname); // IOS XR4
 	$ifname = preg_replace ('@^Mg(?:mtEth)?(.*)$@', 'mg\\1', $ifname); // IOS XR4

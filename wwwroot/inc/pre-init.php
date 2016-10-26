@@ -53,15 +53,25 @@ if (! isset ($local_staticdir)) // the directory where RT will search static fil
 // (re)connects to DB, stores PDO object in $dbxlink global var
 function connectDB()
 {
-	global $dbxlink, $pdo_dsn, $db_username, $db_password, $pdo_bufsize;
+	global $dbxlink, $pdo_dsn, $db_username, $db_password, $pdo_bufsize, $pdo_ssl_key, $pdo_ssl_cert, $pdo_ssl_ca;
 	$dbxlink = NULL;
 	$drvoptions = array
 	(
 		PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-		PDO::MYSQL_ATTR_INIT_COMMAND => 'set names "utf8"',
+		// Cancel one specific SQL mode option that RackTables has been non-compliant
+		// with but which used to be off by default until MySQL 5.7. As soon as
+		// respective SQL queries and table columns become compliant with those options
+		// stop changing @@SQL_MODE but still keep SET NAMES in place.
+		PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES "utf8", @@SQL_MODE = REPLACE(@@SQL_MODE, "NO_ZERO_DATE", "")',
 	);
 	if (isset ($pdo_bufsize))
 		$drvoptions[PDO::MYSQL_ATTR_MAX_BUFFER_SIZE] = $pdo_bufsize;
+	if (isset ($pdo_ssl_key))
+		$drvoptions[PDO::MYSQL_ATTR_SSL_KEY] = $pdo_ssl_key;
+	if (isset ($pdo_ssl_cert))
+		$drvoptions[PDO::MYSQL_ATTR_SSL_CERT] = $pdo_ssl_cert;
+	if (isset ($pdo_ssl_ca))
+		$drvoptions[PDO::MYSQL_ATTR_SSL_CA] = $pdo_ssl_ca;
 	try
 	{
 		$dbxlink = new PDO ($pdo_dsn, $db_username, $db_password, $drvoptions);

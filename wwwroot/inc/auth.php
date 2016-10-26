@@ -27,27 +27,27 @@ function authenticate ()
 		$script_mode,
 		$require_local_account;
 	// Phase 1. Assert basic pre-requisites, short-circuit the logout request.
-	if (!isset ($user_auth_src) or !isset ($require_local_account))
+	if (! isset ($user_auth_src) || ! isset ($require_local_account))
 		throw new RackTablesError ('secret.php: either user_auth_src or require_local_account are missing', RackTablesError::MISCONFIGURED);
 	if (isset ($_REQUEST['logout']))
 	{
-		if (isset ($user_auth_src) and 'saml' == $user_auth_src)
+		if (isset ($user_auth_src) && 'saml' == $user_auth_src)
 			saml_logout ();
 		throw new RackTablesError ('', RackTablesError::NOT_AUTHENTICATED); // Reset browser credentials cache.
 	}
 	// Phase 2. Do some method-specific processing, initialize $remote_username on success.
 	switch (TRUE)
 	{
-		case isset ($script_mode) && $script_mode && isset ($remote_username) && strlen ($remote_username):
+		case isset ($script_mode) && $script_mode && isset ($remote_username) && $remote_username != '':
 			break; // skip this phase
 		case 'database' == $user_auth_src:
 		case 'ldap' == $user_auth_src:
 			if
 			(
-				! isset ($_SERVER['PHP_AUTH_USER']) or
-				! strlen ($_SERVER['PHP_AUTH_USER']) or
-				! isset ($_SERVER['PHP_AUTH_PW']) or
-				! strlen ($_SERVER['PHP_AUTH_PW'])
+				! isset ($_SERVER['PHP_AUTH_USER']) ||
+				$_SERVER['PHP_AUTH_USER'] == '' ||
+				! isset ($_SERVER['PHP_AUTH_PW']) ||
+				$_SERVER['PHP_AUTH_PW'] == ''
 			)
 				throw new RackTablesError ('', RackTablesError::NOT_AUTHENTICATED);
 			$remote_username = $_SERVER['PHP_AUTH_USER'];
@@ -56,7 +56,7 @@ function authenticate ()
 			if
 			(
 				! isset ($_SERVER['REMOTE_USER']) or
-				! strlen ($_SERVER['REMOTE_USER'])
+				$_SERVER['REMOTE_USER'] == ''
 			)
 				throw new RackTablesError ('The web-server didn\'t authenticate the user, although ought to do.', RackTablesError::MISCONFIGURED);
 			$remote_username = $_SERVER['REMOTE_USER'];
@@ -73,7 +73,7 @@ function authenticate ()
 	}
 	// Phase 3. Handle local account requirement, pull user tags into security context.
 	$userinfo = constructUserCell ($remote_username);
-	if ($require_local_account and !isset ($userinfo['user_id']))
+	if ($require_local_account && ! isset ($userinfo['user_id']))
 		throw new RackTablesError ('', RackTablesError::NOT_AUTHENTICATED);
 	$user_given_tags = $userinfo['etags'];
 	$auto_tags = array_merge ($auto_tags, $userinfo['atags']);
@@ -84,14 +84,14 @@ function authenticate ()
 			return; // success
 		// Just trust the server, because the password isn't known.
 		case 'httpd' == $user_auth_src:
-			$remote_displayname = strlen ($userinfo['user_realname']) ?
+			$remote_displayname = $userinfo['user_realname'] != '' ?
 				$userinfo['user_realname'] :
 				$remote_username;
 			return; // success
 		// When using LDAP, leave a mean to fix things. Admin user is always authenticated locally.
-		case array_key_exists ('user_id', $userinfo) and $userinfo['user_id'] == 1:
+		case array_key_exists ('user_id', $userinfo) && $userinfo['user_id'] == 1:
 		case 'database' == $user_auth_src:
-			$remote_displayname = strlen ($userinfo['user_realname']) ?
+			$remote_displayname = $userinfo['user_realname'] != '' ?
 				$userinfo['user_realname'] :
 				$remote_username;
 			if (authenticated_via_database ($userinfo, $_SERVER['PHP_AUTH_PW']))
@@ -101,12 +101,12 @@ function authenticate ()
 			$ldap_dispname = '';
 			if (! authenticated_via_ldap ($remote_username, $_SERVER['PHP_AUTH_PW'], $ldap_dispname))
 				break; // failure
-			$remote_displayname = strlen ($userinfo['user_realname']) ? // local value is most preferred
+			$remote_displayname = $userinfo['user_realname'] != '' ? // local value is most preferred
 				$userinfo['user_realname'] :
-				(strlen ($ldap_dispname) ? $ldap_dispname : $remote_username); // then one from LDAP
+				($ldap_dispname != '' ? $ldap_dispname : $remote_username); // then one from LDAP
 			return; // success
 		case 'saml' == $user_auth_src:
-			$remote_displayname = strlen ($saml_dispname) ? $saml_dispname : $saml_username;
+			$remote_displayname = $saml_dispname != '' ? $saml_dispname : $saml_username;
 			return; // success
 		default:
 			throw new RackTablesError ('Invalid authentication source!', RackTablesError::MISCONFIGURED);
@@ -126,7 +126,7 @@ function permitted ($p = NULL, $t = NULL, $o = NULL, $annex = array())
 		$p = $pageno;
 	if ($t === NULL)
 		$t = $tabno;
-	if ($o === NULL and strlen ($op)) // $op can be set to empty string
+	if ($o === NULL && $op != '') // $op can be set to empty string
 		$o = $op;
 	$my_auto_tags = $auto_tags;
 	$my_auto_tags[] = array ('tag' => '$page_' . $p);
@@ -187,33 +187,28 @@ function assertPermission ($p = NULL, $t = NULL, $o = NULL, $annex = array())
 function gotClearanceForTagChain ($const_base)
 {
 	global $rackCode, $expl_tags, $impl_tags;
-	$ptable = array();
+	$context = array_merge ($const_base, $expl_tags, $impl_tags);
+	$context = reindexById ($context, 'tag', TRUE);
+
 	foreach ($rackCode as $sentence)
 	{
 		switch ($sentence['type'])
 		{
-			case 'SYNT_DEFINITION':
-				$ptable[$sentence['term']] = $sentence['definition'];
-				break;
 			case 'SYNT_GRANT':
-				if (eval_expression ($sentence['condition'], array_merge ($const_base, $expl_tags, $impl_tags), $ptable))
-					switch ($sentence['decision'])
-					{
-						case 'LEX_ALLOW':
-							return TRUE;
-						case 'LEX_DENY':
-							return FALSE;
-						default:
-							throw new RackTablesError ("Condition match for unknown grant decision '${sentence['decision']}'", RackTablesError::INTERNAL);
-					}
+				if (eval_expression ($sentence['condition'], $context))
+					return $sentence['decision'];
 				break;
 			case 'SYNT_ADJUSTMENT':
 				if
 				(
-					eval_expression ($sentence['condition'], array_merge ($const_base, $expl_tags, $impl_tags), $ptable) and
+					eval_expression ($sentence['condition'], $context) &&
 					processAdjustmentSentence ($sentence['modlist'], $expl_tags)
 				) // recalculate implicit chain only after actual change, not just on matched condition
+				{
 					$impl_tags = getImplicitTags ($expl_tags); // recalculate
+					$context = array_merge ($const_base, $expl_tags, $impl_tags);
+					$context = reindexById ($context, 'tag', TRUE);
+				}
 				break;
 			default:
 				throw new RackTablesError ("Can't process sentence of unknown type '${sentence['type']}'", RackTablesError::INTERNAL);
@@ -322,20 +317,29 @@ function authenticated_via_ldap ($username, $password, &$ldap_displayname)
 		if (! array_key_exists ($option_name, $LDAP_options))
 			$LDAP_options[$option_name] = $option_value;
 
-	if
-	(
-		$LDAP_options['cache_retry'] > $LDAP_options['cache_refresh'] or
-		$LDAP_options['cache_refresh'] > $LDAP_options['cache_expiry']
-	)
-		throw new RackTablesError ('LDAP misconfiguration: refresh/retry/expiry mismatch', RackTablesError::MISCONFIGURED);
-	if ($LDAP_options['cache_expiry'] == 0) // immediate expiry set means disabled cache
-		return authenticated_via_ldap_nocache ($username, $password, $ldap_displayname);
-	// authenticated_via_ldap_cache()'s way of locking can sometimes result in
-	// a PDO error condition, which convertPDOException() was not able to dispatch.
-	// To avoid reaching printPDOException() (which prints backtrace with password
-	// argument in cleartext), any remaining PDO condition is converted locally.
 	try
 	{
+		// Destroy the cache each time config changes.
+		if ($LDAP_options['cache_expiry'] != 0 &&
+			sha1 (serialize ($LDAP_options)) != loadScript ('LDAPConfigHash'))
+		{
+			discardLDAPCache();
+			saveScript ('LDAPConfigHash', sha1 (serialize ($LDAP_options)));
+			deleteScript ('LDAPLastSuccessfulServer');
+		}
+
+		if
+		(
+			$LDAP_options['cache_retry'] > $LDAP_options['cache_refresh'] ||
+			$LDAP_options['cache_refresh'] > $LDAP_options['cache_expiry']
+		)
+			throw new RackTablesError ('LDAP misconfiguration: refresh/retry/expiry mismatch', RackTablesError::MISCONFIGURED);
+		if ($LDAP_options['cache_expiry'] == 0) // immediate expiry set means disabled cache
+			return authenticated_via_ldap_nocache ($username, $password, $ldap_displayname);
+		// authenticated_via_ldap_cache()'s way of locking can sometimes result in
+		// a PDO error condition that convertPDOException() was not able to dispatch.
+		// To avoid reaching printPDOException() (which prints backtrace with password
+		// argument in cleartext), any remaining PDO condition is converted locally.
 		return authenticated_via_ldap_cache ($username, $password, $ldap_displayname);
 	}
 	catch (PDOException $e)
@@ -364,6 +368,28 @@ function authenticated_via_ldap_nocache ($username, $password, &$ldap_displaynam
 	return FALSE;
 }
 
+// check that LDAP cache row contains correct password and is not expired
+// if check_for_refreshing = TRUE, also checks that cache row does not need refreshing
+function isLDAPCacheValid ($cache_row, $password_hash, $check_for_refreshing = FALSE)
+{
+	global $LDAP_options;
+	return
+		is_array ($cache_row) &&
+		$cache_row['successful_hash'] === $password_hash &&
+		$cache_row['success_age'] < $LDAP_options['cache_expiry'] &&
+		(
+			// There are two confidence levels of cache hits: "certain" and "uncertain". In either case
+			// expect authentication success, unless it's well-timed to perform a retry,
+			// which may sometimes bring a NAK decision.
+			! $check_for_refreshing ||
+			(
+				$cache_row['success_age'] < $LDAP_options['cache_refresh'] ||
+				isset ($cache_row['retry_age']) &&
+				$cache_row['retry_age'] < $LDAP_options['cache_retry']
+			)
+		);
+}
+
 // Idem, but consider existing data in cache and modify/discard it, when necessary.
 // Remember to have releaseLDAPCache() called before any return statement.
 // Perform cache maintenance on each update.
@@ -371,72 +397,56 @@ function authenticated_via_ldap_cache ($username, $password, &$ldap_displayname)
 {
 	global $LDAP_options, $auto_tags;
 
-	// Destroy the cache each time config changes.
-	if (sha1 (serialize ($LDAP_options)) != loadScript ('LDAPConfigHash'))
+	$user_data = array(); // fill auto_tags and ldap_displayname from this array
+	$password_hash = sha1 ($password);
+
+	// first try to get cache row without locking it (quick way)
+	$cache_row = fetchLDAPCacheRow ($username);
+	if (isLDAPCacheValid ($cache_row, $password_hash, TRUE))
+		$user_data = $cache_row; // cache HIT
+	else
 	{
-		discardLDAPCache();
-		saveScript ('LDAPConfigHash', sha1 (serialize ($LDAP_options)));
-	}
-	$oldinfo = acquireLDAPCache ($username, sha1 ($password), $LDAP_options['cache_expiry']);
-	if ($oldinfo === NULL) // cache miss
-	{
-		// On cache miss execute complete procedure and return the result. In case
-		// of successful authentication put a record into cache.
-		$newinfo = queryLDAPServer ($username, $password);
-		if ($newinfo['result'] == 'ACK')
+		// cache miss or expired. Try to lock LDAPCache for $username
+		$cache_row = acquireLDAPCache ($username);
+		if (isLDAPCacheValid ($cache_row, $password_hash, TRUE))
+			$user_data = $cache_row; // cache HIT, but with DB lock
+		else
 		{
-			$ldap_displayname = $newinfo['displayed_name'];
-			foreach ($newinfo['memberof'] as $autotag)
-				$auto_tags[] = array ('tag' => $autotag);
-			replaceLDAPCacheRecord ($username, sha1 ($password), $newinfo['displayed_name'], $newinfo['memberof']);
-			releaseLDAPCache();
-			discardLDAPCache ($LDAP_options['cache_expiry']);
-			return TRUE;
+			$ldap_answer = queryLDAPServer ($username, $password);
+			switch ($ldap_answer['result'])
+			{
+			case 'ACK':
+				replaceLDAPCacheRecord ($username, $password_hash, $ldap_answer['displayed_name'], $ldap_answer['memberof']);
+				$user_data = $ldap_answer;
+				break;
+			case 'NAK': // The record isn't valid any more.
+				// TODO: negative result caching
+				deleteLDAPCacheRecord ($username);
+				break;
+			case 'CAN': // LDAP query failed, use old value till next retry
+				if (isLDAPCacheValid ($cache_row, $password_hash, FALSE))
+				{
+					touchLDAPCacheRecord ($username);
+					$user_data = $cache_row;
+				}
+				else
+					deleteLDAPCacheRecord ($username);
+				break;
+			default:
+				throw new RackTablesError ('structure error', RackTablesError::INTERNAL);
+			}
 		}
 		releaseLDAPCache();
-		return FALSE;
+		discardLDAPCache ($LDAP_options['cache_expiry']); // clear expired rows of other users
 	}
-	// cache HIT
-	// There are two confidence levels of cache hits: "certain" and "uncertain". In either case
-	// expect authentication success, unless it's well-timed to perform a retry,
-	// which may sometimes bring a NAK decision.
-	if ($oldinfo['success_age'] < $LDAP_options['cache_refresh'] or $oldinfo['retry_age'] < $LDAP_options['cache_retry'])
+
+	if ($user_data)
 	{
-		releaseLDAPCache();
-		$ldap_displayname = $oldinfo['displayed_name'];
-		foreach ($oldinfo['memberof'] as $autotag)
+		$ldap_displayname = $user_data['displayed_name'];
+		foreach ($user_data['memberof'] as $autotag)
 			$auto_tags[] = array ('tag' => $autotag);
 		return TRUE;
 	}
-	// Either refresh threshold or retry threshold reached.
-	$newinfo = queryLDAPServer ($username, $password);
-	switch ($newinfo['result'])
-	{
-	case 'ACK': // refresh existing record
-		$ldap_displayname = $newinfo['displayed_name'];
-		foreach ($newinfo['memberof'] as $autotag)
-			$auto_tags[] = array ('tag' => $autotag);
-		replaceLDAPCacheRecord ($username, sha1 ($password), $newinfo['displayed_name'], $newinfo['memberof']);
-		releaseLDAPCache();
-		discardLDAPCache ($LDAP_options['cache_expiry']);
-		return TRUE;
-	case 'NAK': // The record isn't valid any more.
-		deleteLDAPCacheRecord ($username);
-		releaseLDAPCache();
-		discardLDAPCache ($LDAP_options['cache_expiry']);
-		return FALSE;
-	case 'CAN': // retry failed, do nothing, use old value till next retry
-		$ldap_displayname = $oldinfo['displayed_name'];
-		foreach ($oldinfo['memberof'] as $autotag)
-			$auto_tags[] = array ('tag' => $autotag);
-		touchLDAPCacheRecord ($username);
-		releaseLDAPCache();
-		discardLDAPCache ($LDAP_options['cache_expiry']);
-		return TRUE;
-	default:
-		throw new RackTablesError ('structure error', RackTablesError::INTERNAL);
-	}
-	// This is never reached.
 	return FALSE;
 }
 
@@ -454,40 +464,84 @@ function queryLDAPServer ($username, $password)
 {
 	global $LDAP_options;
 
-	if(extension_loaded('ldap') === FALSE)
+	if (extension_loaded ('ldap') === FALSE)
 		throw new RackTablesError ('LDAP misconfiguration. LDAP PHP Module is not installed.', RackTablesError::MISCONFIGURED);
 
-	$connect = @ldap_connect ($LDAP_options['server']);
-	if ($connect === FALSE)
-		return array ('result' => 'CAN');
+	$ldap_cant_connect_codes = array
+	(
+		-1,			// Can't contact LDAP server error
+		-5,			// LDAP Timed out error
+		-11,		// LDAP connect error
+	);
 
-	if (isset ($LDAP_options['use_tls']) && $LDAP_options['use_tls'] >= 1)
+	$last_successful_server = loadScript ('LDAPLastSuccessfulServer');
+	$success_server = NULL;
+	$servers = preg_split ("/\s+/", $LDAP_options['server'], NULL, PREG_SPLIT_NO_EMPTY);
+	if (isset ($last_successful_server) && in_array ($last_successful_server, $servers))	// Cached server is still present in config ?
 	{
-		$tls = ldap_start_tls ($connect);
-		if ($LDAP_options['use_tls'] >= 2 && $tls == FALSE)
-			throw new RackTablesError ('LDAP misconfiguration: LDAP TLS required but not successfully negotiated.', RackTablesError::MISCONFIGURED);
+		// Use last successful server first
+		$servers = array_diff ($servers, array ($last_successful_server));
+		array_unshift ($servers, $last_successful_server);
 	}
+	// Try to connect to each server until first success
+	foreach ($servers as $server)
+	{
+		$connect = @ldap_connect ($server, array_fetch ($LDAP_options, 'port', 389));
+		if ($connect === FALSE)
+			continue;
+		ldap_set_option ($connect, LDAP_OPT_NETWORK_TIMEOUT, array_fetch ($LDAP_options, 'server_alive_timeout', 2));
+		// If use_tls configuration option is set, then try establish TLS session instead of ldap_bind
+		if (isset ($LDAP_options['use_tls']) && $LDAP_options['use_tls'] >= 1)
+		{
+			$tls = ldap_start_tls ($connect);
+			if ($LDAP_options['use_tls'] >= 2 && $tls == FALSE)
+			{
+				if (in_array (ldap_errno ($connect), $ldap_cant_connect_codes))
+					continue;
+				else
+					throw new RackTablesError ('LDAP misconfiguration: LDAP TLS required but not successfully negotiated.', RackTablesError::MISCONFIGURED);
+			}
+			$success_server = $server;
+			break;
+		}
+		else
+		{
+			if (@ldap_bind ($connect) || !in_array (ldap_errno ($connect), $ldap_cant_connect_codes))
+			{
+				$success_server = $server;
+				// Cleanup after check. This connection will be used below
+				@ldap_unbind ($connect);
+				$connect = ldap_connect ($server, array_fetch ($LDAP_options, 'port', 389));
+				break;
+			}
+		}
+	}
+	if (!isset ($success_server))
+		return array ('result' => 'CAN');
+	if ($LDAP_options['cache_expiry'] != 0 &&
+		$last_successful_server !== $success_server)
+		saveScript ('LDAPLastSuccessfulServer', $success_server);
 
-	if (array_key_exists ('options', $LDAP_options) and is_array ($LDAP_options['options']))
+	if (array_key_exists ('options', $LDAP_options) && is_array ($LDAP_options['options']))
 		foreach ($LDAP_options['options'] as $opt_code => $opt_value)
 			ldap_set_option ($connect, $opt_code, $opt_value);
 
 	// Decide on the username we will actually authenticate for.
-	if (isset ($LDAP_options['domain']) and strlen ($LDAP_options['domain']))
+	if (isset ($LDAP_options['domain']) && $LDAP_options['domain'] != '')
 		$auth_user_name = $username . "@" . $LDAP_options['domain'];
 	elseif
 	(
-		isset ($LDAP_options['search_dn']) and
-		strlen ($LDAP_options['search_dn']) and
-		isset ($LDAP_options['search_attr']) and
-		strlen ($LDAP_options['search_attr'])
+		isset ($LDAP_options['search_dn']) &&
+		$LDAP_options['search_dn'] != '' &&
+		isset ($LDAP_options['search_attr']) &&
+		$LDAP_options['search_attr'] != ''
 	)
 	{
 		// If a search_bind_rdn is supplied, bind to that and use it to search.
 		// This is required unless a server offers anonymous searching.
 		// Using bind again on the connection works as expected.
 		// The password is optional as it might be optional on server, too.
-		if (isset ($LDAP_options['search_bind_rdn']) && strlen ($LDAP_options['search_bind_rdn']))
+		if (isset ($LDAP_options['search_bind_rdn']) && $LDAP_options['search_bind_rdn'] != '')
 		{
 			$search_bind = @ldap_bind
 			(
@@ -533,12 +587,12 @@ function queryLDAPServer ($username, $password)
 	// Displayed name only makes sense for authenticated users anyway.
 	if
 	(
-		isset ($LDAP_options['displayname_attrs']) and
-		strlen ($LDAP_options['displayname_attrs']) and
-		isset ($LDAP_options['search_dn']) and
-		strlen ($LDAP_options['search_dn']) and
-		isset ($LDAP_options['search_attr']) and
-		strlen ($LDAP_options['search_attr'])
+		isset ($LDAP_options['displayname_attrs']) &&
+		$LDAP_options['displayname_attrs'] != '' &&
+		isset ($LDAP_options['search_dn']) &&
+		$LDAP_options['search_dn'] != '' &&
+		isset ($LDAP_options['search_attr']) &&
+		$LDAP_options['search_attr'] != ''
 	)
 	{
 		$results = @ldap_search
@@ -557,17 +611,18 @@ function queryLDAPServer ($username, $password)
 		ldap_free_result ($results);
 		$space = '';
 		foreach (explode (' ', $LDAP_options['displayname_attrs']) as $attr)
-		{
-			$ret['displayed_name'] .= $space . $info[0][$attr][0];
-			$space = ' ';
-		}
+			if (isset ($info[0][$attr]))
+			{
+				$ret['displayed_name'] .= $space . $info[0][$attr][0];
+				$space = ' ';
+			}
 		// Pull group membership, if any was returned.
 		if (isset ($info[0][$LDAP_options['group_attr']]))
 			for ($i = 0; $i < $info[0][$LDAP_options['group_attr']]['count']; $i++)
 				if
 				(
-					preg_match ($LDAP_options['group_filter'], $info[0][$LDAP_options['group_attr']][$i], $matches)
-					and validTagName ('$lgcn_' . $matches[1], TRUE)
+					preg_match ($LDAP_options['group_filter'], $info[0][$LDAP_options['group_attr']][$i], $matches) &&
+					validTagName ('$lgcn_' . $matches[1], TRUE)
 				)
 					$ret['memberof'][] = '$lgcn_' . $matches[1];
 	}

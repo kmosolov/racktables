@@ -25,6 +25,15 @@ $iftable_processors['generic-fa-any-100TX'] = array
 	'try_next_proc' => FALSE,
 );
 
+$iftable_processors['generic-g12-and-g24-combo-1000SFP'] = array
+(
+	'pattern' => '@^g(12|24)$@',
+	'replacement' => 'g\\1',
+	'dict_key' => '4-1077',
+	'label' => 'g\\1',
+	'try_next_proc' => TRUE,
+);
+
 $iftable_processors['generic-g45-to-g48-combo-1000SFP'] = array
 (
 	'pattern' => '@^g(45|46|47|48)$@',
@@ -88,6 +97,15 @@ $iftable_processors['generic-gi-1-to-2-1000T'] = array
 	'try_next_proc' => FALSE,
 );
 
+$iftable_processors['generic-gi-1-to-2-combo-1000SFP'] = array
+(
+	'pattern' => '@^gi(1|2)$@',
+	'replacement' => 'gi\\1',
+	'dict_key' => '4-1077',
+	'label' => 'G\\1',
+	'try_next_proc' => TRUE,
+);
+
 $iftable_processors['generic-gi-3-to-4-combo-1000SFP'] = array
 (
 	'pattern' => '@^gi(3|4)$@',
@@ -124,6 +142,96 @@ $iftable_processors['generic-gi-9-to-10-combo-1000T'] = array
 	'try_next_proc' => FALSE,
 );
 
+$iftable_processors['generic-gi-17-to-18-combo-1000SFP'] = array
+(
+	'pattern' => '@^gi(17|18)$@',
+	'replacement' => 'gi\\1',
+	'dict_key' => '4-1077',
+	'label' => 'G\\1',
+	'try_next_proc' => TRUE,
+);
+
+$iftable_processors['generic-gi-17-to-18-combo-1000T'] = array
+(
+	'pattern' => '@^gi(17|18)$@',
+	'replacement' => 'gi\\1',
+	'dict_key' => '1-24',
+	'label' => 'G\\1',
+	'try_next_proc' => FALSE,
+);
+
+$iftable_processors['generic-gi-19-to-20-combo-1000SFP'] = array
+(
+	'pattern' => '@^gi(19|20)$@',
+	'replacement' => 'gi\\1',
+	'dict_key' => '4-1077',
+	'label' => 'G\\1',
+	'try_next_proc' => TRUE,
+);
+
+$iftable_processors['generic-gi-19-to-20-combo-1000T'] = array
+(
+	'pattern' => '@^gi(19|20)$@',
+	'replacement' => 'gi\\1',
+	'dict_key' => '1-24',
+	'label' => 'G\\1',
+	'try_next_proc' => FALSE,
+);
+
+$iftable_processors['generic-gi-25-to-26-combo-1000SFP'] = array
+(
+	'pattern' => '@^gi(25|26)$@',
+	'replacement' => 'gi\\1',
+	'dict_key' => '4-1077',
+	'label' => 'G\\1',
+	'try_next_proc' => TRUE,
+);
+
+$iftable_processors['generic-gi-25-to-26-combo-1000T'] = array
+(
+	'pattern' => '@^gi(25|26)$@',
+	'replacement' => 'gi\\1',
+	'dict_key' => '1-24',
+	'label' => 'G\\1',
+	'try_next_proc' => FALSE,
+);
+
+$iftable_processors['generic-gi-27-to-28-combo-1000SFP'] = array
+(
+	'pattern' => '@^gi(27|28)$@',
+	'replacement' => 'gi\\1',
+	'dict_key' => '4-1077',
+	'label' => 'G\\1',
+	'try_next_proc' => TRUE,
+);
+
+$iftable_processors['generic-gi-27-to-28-combo-1000T'] = array
+(
+	'pattern' => '@^gi(27|28)$@',
+	'replacement' => 'gi\\1',
+	'dict_key' => '1-24',
+	'label' => 'G\\1',
+	'try_next_proc' => FALSE,
+);
+
+$iftable_processors['generic-gi-49-to-50-combo-1000SFP'] = array
+(
+	'pattern' => '@^gi(49|50)$@',
+	'replacement' => 'gi\\1',
+	'dict_key' => '4-1077',
+	'label' => 'G\\1',
+	'try_next_proc' => TRUE,
+);
+
+$iftable_processors['generic-gi-49-to-50-combo-1000T'] = array
+(
+	'pattern' => '@^gi(49|50)$@',
+	'replacement' => 'gi\\1',
+	'dict_key' => '1-24',
+	'label' => 'G\\1',
+	'try_next_proc' => FALSE,
+);
+
 $iftable_processors['generic-gi-51-to-52-combo-1000SFP'] = array
 (
 	'pattern' => '@^gi(51|52)$@',
@@ -151,12 +259,120 @@ $iftable_processors['generic-port-any-1000T'] = array
 	'try_next_proc' => FALSE,
 );
 
+$iftable_processors['generic-any-1000T'] = array
+(
+	'pattern' => '@^([[:digit:]]+)$@',
+	'replacement' => '\\1',
+	'dict_key' => 24,
+	'label' => '\\1',
+	'try_next_proc' => FALSE,
+);
+
+$iftable_processors['generic-21-to-24-combo-1000SFP'] = array
+(
+	'pattern' => '@^(21|22|23|24)$@',
+	'replacement' => '\\1',
+	'dict_key' => '4-1077',
+	'label' => '\\1',
+	'try_next_proc' => TRUE,
+);
+
+$iftable_processors['cisco-smb-any-100TX'] = array
+(
+	'pattern' => '@^FastEthernet(\d+)$@',
+	'replacement' => 'fa\\1',
+	'dict_key' => 19,
+	'label' => '\\1',
+	'try_next_proc' => FALSE,
+);
+
+$iftable_processors['cisco-smb-any-1000T'] = array
+(
+	'pattern' => '@^GigabitEthernet(\d+)$@',
+	'replacement' => 'gi\\1',
+	'dict_key' => 24,
+	'label' => '\\1',
+	'try_next_proc' => FALSE,
+);
+
+$iftable_processors['cisco-smb-1-to-2-combo-1000SFP'] = array
+(
+	'pattern' => '@^GigabitEthernet(1|2)$@',
+	'replacement' => 'gi\\1',
+	'dict_key' => '4-1077',
+	'label' => 'G\\1',
+	'try_next_proc' => TRUE,
+);
+
+$iftable_processors['cisco-smb-1-to-2-combo-1000T'] = array
+(
+	'pattern' => '@^GigabitEthernet(1|2)$@',
+	'replacement' => 'gi\\1',
+	'dict_key' => 24,
+	'label' => 'G\\1',
+	'try_next_proc' => FALSE,
+);
+
+$iftable_processors['cisco-smb-25-to-26-combo-1000SFP'] = array
+(
+	'pattern' => '@^GigabitEthernet(25|26)$@',
+	'replacement' => 'gi\\1',
+	'dict_key' => '4-1077',
+	'label' => 'G\\1',
+	'try_next_proc' => TRUE,
+);
+
+$iftable_processors['cisco-smb-25-to-26-combo-1000T'] = array
+(
+	'pattern' => '@^GigabitEthernet(25|26)$@',
+	'replacement' => 'gi\\1',
+	'dict_key' => 24,
+	'label' => 'G\\1',
+	'try_next_proc' => FALSE,
+);
+
+$iftable_processors['cisco-smb-49-to-50-combo-1000SFP'] = array
+(
+	'pattern' => '@^GigabitEthernet(49|50)$@',
+	'replacement' => 'gi\\1',
+	'dict_key' => '4-1077',
+	'label' => 'G\\1',
+	'try_next_proc' => TRUE,
+);
+
+$iftable_processors['cisco-smb-49-to-50-combo-1000T'] = array
+(
+	'pattern' => '@^GigabitEthernet(49|50)$@',
+	'replacement' => 'gi\\1',
+	'dict_key' => 24,
+	'label' => 'G\\1',
+	'try_next_proc' => FALSE,
+);
+
+$iftable_processors['catalyst-any-10TX'] = array
+(
+	'pattern' => '@^([[:digit:]]+)$@',
+	'replacement' => '\\1',
+	'dict_key' => 18,
+	'label' => '\\1x',
+	'try_next_proc' => FALSE,
+);
+
 $iftable_processors['catalyst-any-100TX'] = array
 (
 	'pattern' => '@^FastEthernet(\d+)$@',
 	'replacement' => 'fa\\1',
 	'dict_key' => 19,
 	'label' => 'fa\\1',
+	'try_next_proc' => FALSE,
+);
+
+$iftable_processors['catalyst-a-to-b-100TX'] = array
+(
+	'pattern' => '@^(A|B)$@',
+	'replacement' => '\\1',
+	'dict_key' => 19,
+	'label' => '\\1x',
 	'try_next_proc' => FALSE,
 );
 
@@ -456,11 +672,29 @@ $iftable_processors['catalyst-stack-25-to-28-SFP'] = array
 	'try_next_proc' => FALSE,
 );
 
+$iftable_processors['catalyst-stack-49-to-52-SFP'] = array
+(
+	'pattern' => '@^GigabitEthernet(\d+)/(\d+)/(49|50|51|52)$@',
+	'replacement' => 'gi\\1/\\2/\\3',
+	'dict_key' => '4-1077',
+	'label' => 'unit \\1 port \\3',
+	'try_next_proc' => FALSE,
+);
+
 $iftable_processors['catalyst-stack-1-to-4-SFP'] = array
 (
 	'pattern' => '@^GigabitEthernet(\d+)/(\d+)/([1-4])$@',
 	'replacement' => 'gi\\1/\\2/\\3',
 	'dict_key' => '4-1077',
+	'label' => 'unit \\1 port \\3',
+	'try_next_proc' => FALSE,
+);
+
+$iftable_processors['catalyst-stack-uplinks-10000SFP+'] = array
+(
+	'pattern' => '@^TenGigabitEthernet(\d+)/(\d+)/([1-4])$@',
+	'replacement' => 'te\\1/\\2/\\3',
+	'dict_key' => '9-1084',
 	'label' => 'unit \\1 port \\3',
 	'try_next_proc' => FALSE,
 );
@@ -489,6 +723,42 @@ $iftable_processors['nexus-any-10000SFP+'] = array
 	'replacement' => 'e\\1',
 	'dict_key' => '9-1084',
 	'label' => '\\1',
+	'try_next_proc' => FALSE,
+);
+
+
+$iftable_processors['nexus-any-QSFP-split'] = array
+(
+	'pattern' => '@^Ethernet(([[:digit:]]+)/([[:digit:]]+)/([[:digit:]]+))$@',
+	'replacement' => 'e\\1',
+	'dict_key' => '9-1084',
+	'label' => '\\2/\\3:\\4',
+	'try_next_proc' => FALSE,
+);
+
+$iftable_processors['nexus-any-QSFP+'] = array
+(
+	'pattern' => '@^Ethernet([[:digit:]]/[[:digit:]]+)$@',
+	'replacement' => 'e\\1',
+	'dict_key' => '10-1588',
+	'label' => '\\1',
+	'try_next_proc' => FALSE,
+);
+
+$iftable_processors['nexus-3048-1000TX'] = array
+(
+	'pattern' => '@^Ethernet([[:digit:]]/[[:digit:]]+)$@',
+	'replacement' => 'e\\1',
+	'dict_key' => '24', // From database - check wwwroot/inc/install.php
+	'label' => '\\1',
+	'try_next_proc' => FALSE,
+);
+$iftable_processors['nexus-3048-49-to-52-1000SFP'] = array
+(
+	'pattern' => '@^Ethernet([[:digit:]]+/)?(49|50|51|52)$@',
+	'replacement' => 'e\\1\\2',
+	'dict_key' => '9-1084',
+	'label' => '\\1\\2',
 	'try_next_proc' => FALSE,
 );
 
@@ -585,6 +855,15 @@ $iftable_processors['procurve-21-to-24-combo-1000SFP'] = array
 $iftable_processors['procurve-23-to-24-combo-1000SFP'] = array
 (
 	'pattern' => '@^(23|24)$@',
+	'replacement' => '\\1',
+	'dict_key' => '4-1077',
+	'label' => '\\1',
+	'try_next_proc' => TRUE,
+);
+
+$iftable_processors['procurve-25-to-26-combo-1000SFP'] = array
+(
+	'pattern' => '@^(25|26)$@',
 	'replacement' => '\\1',
 	'dict_key' => '4-1077',
 	'label' => '\\1',
@@ -1122,6 +1401,15 @@ $iftable_processors['hce-any-SFP'] = array
 	'try_next_proc' => FALSE,
 );
 
+$iftable_processors['hce-any-QSFP-split'] = array
+(
+	'pattern' => '@^40GE([[:digit:]]+/[[:digit:]]+/)([[:digit:]]+):([[:digit:]]+)$@',
+	'replacement' => '40ge\\1\\2:\\3',
+	'dict_key' => '9-1084',
+	'label' => '\\2:\\3',
+	'try_next_proc' => FALSE,
+);
+
 $iftable_processors['hce-any-QSFP'] = array
 (
 	'pattern' => '@^40GE([[:digit:]]+/[[:digit:]]+/)([[:digit:]]+)$@',
@@ -1220,6 +1508,24 @@ $iftable_processors['fcx-management'] = array
 	'replacement' => 'management1',
 	'dict_key' => '1-24',
 	'label' => 'Management',
+	'try_next_proc' => FALSE,
+);
+
+$iftable_processors['turboiron-any-10000SFP+'] = array
+(
+	'pattern' => '@^10GigabitEthernet([[:digit:]]+)$@',
+	'replacement' => 'e\\1',
+	'dict_key' => '4-1077',
+	'label' => 'Slot \\1',
+	'try_next_proc' => FALSE,
+);
+
+$iftable_processors['turboiron-any-10-100-1000T'] = array
+(
+	'pattern' => '@^GigabitEthernet([[:digit:]]+)$@',
+	'replacement' => 'e\\1',
+	'dict_key' => '1-24',
+	'label' => 'Slot \\1',
 	'try_next_proc' => FALSE,
 );
 
@@ -1448,6 +1754,51 @@ $iftable_processors['dell-any-1000SFP'] = array
 	'try_next_proc' => FALSE,
 );
 
+$iftable_processors['3com-27-to-28-1000T'] = array
+(
+	'pattern' => '@^GigabitEthernet(\d+)/(\d+)/(27|28)$@',
+	'replacement' => '\\1/\\2/\\3',
+	'dict_key' => '1-24',
+	'label' => '\\3',
+	'try_next_proc' => FALSE,
+);
+
+$iftable_processors['3com-51-to-52-1000T'] = array
+(
+	'pattern' => '@^GigabitEthernet(\d+)/(\d+)/(51|52)$@',
+	'replacement' => '\\1/\\2/\\3',
+	'dict_key' => '1-24',
+	'label' => '\\3',
+	'try_next_proc' => FALSE,
+);
+
+$iftable_processors['3com-25-to-26-1000SFP'] = array
+(
+	'pattern' => '@^GigabitEthernet(\d+)/(\d+)/(25|26)$@',
+	'replacement' => '\\1/\\2/\\3',
+	'dict_key' => '4-1077',
+	'label' => '\\3',
+	'try_next_proc' => FALSE,
+);
+
+$iftable_processors['3com-27-to-28-1000SFP'] = array
+(
+	'pattern' => '@^GigabitEthernet(\d+)/(\d+)/(27|28)$@',
+	'replacement' => '\\1/\\2/\\3',
+	'dict_key' => '4-1077',
+	'label' => '\\3',
+	'try_next_proc' => FALSE,
+);
+
+$iftable_processors['3com-49-to-50-1000SFP'] = array
+(
+	'pattern' => '@^GigabitEthernet(\d+)/(\d+)/(49|50)$@',
+	'replacement' => '\\1/\\2/\\3',
+	'dict_key' => '4-1077',
+	'label' => '\\3',
+	'try_next_proc' => FALSE,
+);
+
 $iftable_processors['3com-49-to-50-1000T'] = array
 (
 	'pattern' => '@^GigabitEthernet(\d+)/(\d+)/(49|50)$@',
@@ -1457,9 +1808,9 @@ $iftable_processors['3com-49-to-50-1000T'] = array
 	'try_next_proc' => FALSE,
 );
 
-$iftable_processors['3com-49-to-52-1000SFP'] = array
+$iftable_processors['3com-51-to-52-1000SFP'] = array
 (
-	'pattern' => '@^GigabitEthernet(\d+)/(\d+)/(49|50|51|52)$@',
+	'pattern' => '@^GigabitEthernet(\d+)/(\d+)/(51|52)$@',
 	'replacement' => '\\1/\\2/\\3',
 	'dict_key' => '4-1077',
 	'label' => '\\3',
@@ -1673,12 +2024,48 @@ $iftable_processors['ibm-49-to-52-SFP+'] = array
 	'try_next_proc' => FALSE,
 );
 
+$iftable_processors['ibm-45-to-48-SFP'] = array
+(
+	'pattern' => '@^Ethernet(45|46|47|48)$@',
+	'replacement' => 'port \\1',
+	'dict_key' => '4-1077',
+	'label' => '\\1',
+	'try_next_proc' => FALSE,
+);
+
 $iftable_processors['ibm-any-SFP+'] = array
 (
 	'pattern' => '@^Ethernet(\d+)$@',
 	'replacement' => 'port \\1',
 	'dict_key' => '9-1084',
 	'label' => '\\1',
+	'try_next_proc' => FALSE,
+);
+
+$iftable_processors['brocade-icx-64xx-1000SFP'] = array
+(
+	'pattern' => '@^GigabitEthernet([[:digit:]]+/2/)([[:digit:]]+)$@',
+	'replacement' => '\\1\\2',
+	'dict_key' => '4-1077', // empty SFP-1000
+	'label' => '\\2',
+	'try_next_proc' => FALSE,
+);
+
+$iftable_processors['brocade-icx-64xx-10000SFP'] = array
+(
+	'pattern' => '@^10GigabitEthernet([[:digit:]]+/2/)([[:digit:]]+)$@',
+	'replacement' => '\\1\\2',
+	'dict_key' => '9-1084', // empty SFP+
+	'label' => '\\2',
+	'try_next_proc' => FALSE,
+);
+
+$iftable_processors['brocade-icx-64xx-1000T'] = array
+(
+	'pattern' => '@^GigabitEthernet([[:digit:]]+/1/)([[:digit:]]+)$@',
+	'replacement' => '\\1\\2',
+	'dict_key' => '1-24',
+	'label' => '\\2',
 	'try_next_proc' => FALSE,
 );
 
@@ -1937,6 +2324,12 @@ $known_switches = array // key is system OID w/o "enterprises" prefix
 		'text' => 'WS-CE500-24TT: 24 RJ-45/10-100TX + 2 RJ-45/10-100-1000T(X)',
 		'processors' => array ('catalyst-any-100TX', 'catalyst-any-1000T'),
 	),
+	'9.1.726' => array
+	(
+		'dict_key' => 159,
+		'text' => 'WS-CE500-24PC: 24 RJ-45/10-100TX PoE + 2 combo',
+		'processors' => array ('catalyst-chassis-1-to-2-combo-1000T', 'catalyst-chassis-any-100TX', 'catalyst-chassis-mgmt'),
+	),
 	'9.1.727' => array
 	(
 		'dict_key' => 161,
@@ -1977,7 +2370,13 @@ $known_switches = array // key is system OID w/o "enterprises" prefix
 	(
 		'dict_key' => 139,
 		'text' => 'WS-C3560-8PC 8 RJ-45/10-100TX + 1 combo-gig',
-		'processors' => array ('catalyst-chassis-1-to-2-combo-1000SFP','catalyst-chassis-any-1000T','catalyst-chassis-any-100TX'),
+		'processors' => array ('catalyst-chassis-1-to-2-combo-1000SFP', 'catalyst-chassis-any-1000T', 'catalyst-chassis-any-100TX'),
+	),
+	'9.1.798' => array
+	(
+		'dict_key' => 165,
+		'text' => 'WS-C2960-8TC-L 8 RJ-45/10-100TX + 1 combo-gig',
+		'processors' => array ('catalyst-chassis-1-to-2-combo-1000SFP', 'catalyst-chassis-any-1000T', 'catalyst-chassis-any-100TX'),
 	),
 	'9.1.799' => array
 	(
@@ -2125,6 +2524,12 @@ $known_switches = array // key is system OID w/o "enterprises" prefix
 			'catalyst-chassis-mgmt',
 		),
 	),
+	'9.1.1245' => array
+	(
+		'dict_key' => 2211,
+		'text' => 'CGS-2520-24TC: 24 RJ-45/10-100T(X) + 2 combo gig',
+		'processors' => array ('catalyst-chassis-1-to-2-combo-1000SFP', 'catalyst-chassis-any-1000T', 'catalyst-chassis-any-100TX'),
+	),
 	'9.1.1257' => array
 	(
 		'dict_key' => 1391,
@@ -2136,6 +2541,12 @@ $known_switches = array // key is system OID w/o "enterprises" prefix
 		'dict_key' => 1394,
 		'text' => 'WS-C2960S-24PS-L: 24 RJ-45/10-100-1000T(X) + 4 SFP/1000',
 		'processors' => array ('catalyst-stack-25-to-28-SFP', 'catalyst-chassis-mgmt', 'catalyst-stack-any-1000T'),
+	),
+	'9.1.1266' => array
+	(
+		'dict_key' => 1388,
+		'text' => 'WS-C2960S-48TS-L: 48 RJ-45/10-100-1000T(X) + 4 SFP/1000',
+		'processors' => array ('catalyst-stack-49-to-52-SFP', 'catalyst-chassis-mgmt', 'catalyst-stack-any-1000T'),
 	),
 	'9.1.1292' => array
 	(
@@ -2167,6 +2578,94 @@ $known_switches = array // key is system OID w/o "enterprises" prefix
 		'text' => 'WS-C2960S-F48LPS-L: 48 RJ-45/10-100TX + 4 SFP/1000',
 		'processors' => array ('catalyst-stack-1-to-4-SFP', 'catalyst-chassis-mgmt', 'catalyst-stack-any-100TX'),
 	),
+	'9.1.1693' => array
+	(
+		'dict_key' => 2112,
+		'text' => 'WS-C2960X-24PD-L: 24 RJ-45/10-100-1000T(X) + 2 SFP+/10000',
+		'processors' => array ('catalyst-stack-uplinks-10000SFP+', 'catalyst-chassis-mgmt', 'catalyst-stack-any-1000T'),
+
+	),
+	'9.1.1696' => array
+	(
+		'dict_key' => 2116,
+		'text' => 'WS-C2960X-48LPS-L: 48 RJ-45/10-100-1000T(X) + 4 SFP/1000',
+		'processors' => array ('catalyst-stack-49-to-52-SFP', 'catalyst-chassis-mgmt', 'catalyst-stack-any-1000T'),
+
+	),
+	'9.1.1697' => array
+	(
+		'dict_key' => 2117,
+		'text' => 'WS-C2960X-24PS-L: 24 RJ-45/10-100-1000T(X) + 4 SFP+/10000',
+		'processors' => array ('catalyst-stack-uplinks-10000SFP+', 'catalyst-chassis-mgmt', 'catalyst-stack-any-1000T'),
+
+	),
+	'9.1.1704' => array
+	(
+		'dict_key' => 2122,
+		'text' => 'WS-C2960X-24TS-LL: 24 RJ-45/10-100-1000T(X) + 2 SFP/1000',
+		'processors' => array ('catalyst-chassis-25-to-26-1000SFP', 'catalyst-chassis-mgmt', 'catalyst-chassis-any-1000T'),
+
+	),
+	'9.1.1750' => array
+	(
+		'dict_key' => 2135,
+		'text' => 'WS-C2960+24LC-L: 24/48 RJ-45/10-100TX + 2 combo-gig',
+		'processors' => array ('catalyst-chassis-1-to-2-combo-1000SFP', 'catalyst-chassis-any-1000T', 'catalyst-chassis-any-100TX'),
+	),
+	'9.1.1755' => array
+	(
+		'dict_key' => 2140,
+		'text' => 'WS-C2960+24LC-S: 24/48 RJ-45/10-100TX + 2 combo-gig',
+		'processors' => array ('catalyst-chassis-1-to-2-combo-1000SFP', 'catalyst-chassis-any-1000T', 'catalyst-chassis-any-100TX'),
+	),
+	'9.1.1749' => array
+	(
+		'dict_key' => 2134,
+		'text' => 'WS-C2960+24PC-L: 24/48 RJ-45/10-100TX + 2 combo-gig',
+		'processors' => array ('catalyst-chassis-1-to-2-combo-1000SFP', 'catalyst-chassis-any-1000T', 'catalyst-chassis-any-100TX'),
+	),
+	'9.1.1754' => array
+	(
+		'dict_key' => 2139,
+		'text' => 'WS-C2960+24PC-S: 24/48 RJ-45/10-100TX + 2 combo-gig',
+		'processors' => array ('catalyst-chassis-1-to-2-combo-1000SFP', 'catalyst-chassis-any-1000T', 'catalyst-chassis-any-100TX'),
+	),
+	'9.1.1752' => array
+	(
+		'dict_key' => 2137,
+		'text' => 'WS-C2960+24TC-L: 24/48 RJ-45/10-100TX + 2 combo-gig',
+		'processors' => array ('catalyst-chassis-1-to-2-combo-1000SFP', 'catalyst-chassis-any-1000T', 'catalyst-chassis-any-100TX'),
+	),
+	'9.1.1757' => array
+	(
+		'dict_key' => 2141,
+		'text' => 'WS-C2960+24TC-S: 24/48 RJ-45/10-100TX + 2 combo-gig',
+		'processors' => array ('catalyst-chassis-1-to-2-combo-1000SFP', 'catalyst-chassis-any-1000T', 'catalyst-chassis-any-100TX'),
+	),
+	'9.1.1748' => array
+	(
+		'dict_key' => 2132,
+		'text' => 'WS-C2960+48PST-L: 24/48 RJ-45/10-100TX + 2 combo-gig',
+		'processors' => array ('catalyst-chassis-1-to-2-combo-1000SFP', 'catalyst-chassis-any-1000T', 'catalyst-chassis-any-100TX'),
+	),
+	'9.1.1753' => array
+	(
+		'dict_key' => 2138,
+		'text' => 'WS-C2960+48PST-S: 24/48 RJ-45/10-100TX + 2 combo-gig',
+		'processors' => array ('catalyst-chassis-1-to-2-combo-1000SFP', 'catalyst-chassis-any-1000T', 'catalyst-chassis-any-100TX'),
+	),
+	'9.1.1756' => array
+	(
+		'dict_key' => 2219,
+		'text' => 'WS-C2960+48TC-S: 24/48 RJ-45/10-100TX + 2 combo-gig',
+		'processors' => array ('catalyst-chassis-1-to-2-combo-1000SFP', 'catalyst-chassis-any-1000T', 'catalyst-chassis-any-100TX'),
+	),
+	'9.5.18' => array
+	(
+		'dict_key' => 2094,
+		'text' => 'WS-C1924-A: 24 RJ-45/10TX + 2 100TX',
+		'processors' => array ('catalyst-a-to-b-100TX', 'catalyst-any-10TX'),
+	),
 	'9.5.42' => array
 	(
 		'dict_key' => 1796,
@@ -2174,10 +2673,72 @@ $known_switches = array // key is system OID w/o "enterprises" prefix
 		'processors' => array ('catalyst-2948-49-to-50-SFP', 'catalyst-2948-any-100TX'),
 		'ifDescrOID' => 'entPhysicalName',
 	),
+	'9.6.1.82.8.1' => array
+	(
+		'dict_key' => 2374,
+		'text' => 'SF 302-08: 8 RJ-45/10/100TX + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-1-to-2-combo-1000SFP',
+			'generic-gi-1-to-2-1000T',
+			'generic-fa-any-100TX',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.82.8.2' => array
+	(
+		'dict_key' => 2372,
+		'text' => 'SF 302-08P: 8 RJ-45/10/100TX PWR + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-1-to-2-combo-1000SFP',
+			'generic-gi-1-to-2-1000T',
+			'generic-fa-any-100TX',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.82.8.3' => array
+	(
+		'dict_key' => 2091,
+		'text' => 'SF 302-08MP: 8 RJ-45/10/100TX PWR + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-1-to-2-combo-1000SFP',
+			'generic-gi-1-to-2-1000T',
+			'generic-fa-any-100TX',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.82.24.1' => array
+	(
+		'dict_key' => 2373,
+		'text' => 'SF 300-24: RJ-45/10/100 + 2 RJ-45/10/100/1000T(X) + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-3-to-4-combo-1000SFP',
+			'generic-gi-3-to-4-combo-1000T',
+			'generic-gi-1-to-2-1000T',
+			'generic-fa-any-100TX',
+		),
+		'ifDescrOID' => 'ifName',
+	),
 	'9.6.1.82.24.2' => array
 	(
 		'dict_key' => 1784,
 		'text' => 'SF 300-24P: RJ-45/10/100 + 2 RJ-45/10/100/1000T(X) + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-3-to-4-combo-1000SFP',
+			'generic-gi-3-to-4-combo-1000T',
+			'generic-gi-1-to-2-1000T',
+			'generic-fa-any-100TX',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.82.24.3' => array
+	(
+		'dict_key' => 2375,
+		'text' => 'SF 300-24MP: RJ-45/10/100 + 2 RJ-45/10/100/1000T(X) + 2 combo-gig',
 		'processors' => array
 		(
 			'generic-gi-3-to-4-combo-1000SFP',
@@ -2200,6 +2761,19 @@ $known_switches = array // key is system OID w/o "enterprises" prefix
 		),
 		'ifDescrOID' => 'ifName',
 	),
+	'9.6.1.82.48.2' => array
+	(
+		'dict_key' => 2366,
+		'text' => 'SF 300-48P: 48 RJ-45/10/100 + 2 RJ-45/10-100-1000T(X) + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-3-to-4-combo-1000SFP',
+			'generic-gi-3-to-4-combo-1000T',
+			'generic-gi-1-to-2-1000T',
+			'generic-fa-any-100TX',
+		),
+		'ifDescrOID' => 'ifName',
+	),
 	'9.6.1.83.10.1' => array
 	(
 		'dict_key' => 1785,
@@ -2212,6 +2786,90 @@ $known_switches = array // key is system OID w/o "enterprises" prefix
 		),
 		'ifDescrOID' => 'ifName',
 	),
+	'9.6.1.83.10.2' => array
+	(
+		'dict_key' => 2368,
+		'text' => 'SG 300-10P: 8 RJ-45/10/100/1000T(X) + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-9-to-10-combo-1000SFP',
+			'generic-gi-9-to-10-combo-1000T',
+			'generic-gi-any-1000T',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.83.10.3' => array
+	(
+		'dict_key' => 2367,
+		'text' => 'SG 300-10MP: 8 RJ-45/10/100/1000T(X) + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-9-to-10-combo-1000SFP',
+			'generic-gi-9-to-10-combo-1000T',
+			'generic-gi-any-1000T',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.83.10.5' => array
+	(
+		'dict_key' => 2376,
+		'text' => 'SG 300-10SFP: 8 RJ-45/10/100/1000T(X) + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-9-to-10-combo-1000SFP',
+			'generic-gi-9-to-10-combo-1000T',
+			'generic-gi-any-1000SFP',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.83.20.1' => array
+	(
+		'dict_key' => 2371,
+		'text' => 'SG 300-20: 18 RJ-45/10/100/1000T(X) + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-19-to-20-combo-1000SFP',
+			'generic-gi-19-to-20-combo-1000T',
+			'generic-gi-any-1000T',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.83.28.1' => array
+	(
+		'dict_key' => 2370,
+		'text' => 'SG 300-28: 26 RJ-45/10/100/1000T(X) + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-27-to-28-combo-1000SFP',
+			'generic-gi-27-to-28-combo-1000T',
+			'generic-gi-any-1000T',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.83.28.2' => array
+	(
+		'dict_key' => 2369,
+		'text' => 'SG 300-28P: 26 RJ-45/10/100/1000T(X) + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-27-to-28-combo-1000SFP',
+			'generic-gi-27-to-28-combo-1000T',
+			'generic-gi-any-1000T',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.83.28.3' => array
+	(
+		'dict_key' => 2377,
+		'text' => 'SG 300-28MP: 26 RJ-45/10/100/1000T(X) + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-27-to-28-combo-1000SFP',
+			'generic-gi-27-to-28-combo-1000T',
+			'generic-gi-any-1000T',
+		),
+		'ifDescrOID' => 'ifName',
+	),
 	'9.6.1.83.52.1' => array
 	(
 		'dict_key' => 1783,
@@ -2220,6 +2878,282 @@ $known_switches = array // key is system OID w/o "enterprises" prefix
 		(
 			'generic-gi-51-to-52-combo-1000SFP',
 			'generic-gi-51-to-52-combo-1000T',
+			'generic-gi-any-1000T',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.83.52.2' => array
+	(
+		'dict_key' => 2378,
+		'text' => 'SG 300-52P: 50 RJ-45/10/100/1000T(X) + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-51-to-52-combo-1000SFP',
+			'generic-gi-51-to-52-combo-1000T',
+			'generic-gi-any-1000T',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.83.52.3' => array
+	(
+		'dict_key' => 2379,
+		'text' => 'SG 300-52MP: 50 RJ-45/10/100/1000T(X) + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-51-to-52-combo-1000SFP',
+			'generic-gi-51-to-52-combo-1000T',
+			'generic-gi-any-1000T',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.84.24.1' => array
+	(
+		'dict_key' => 2357,
+		'text' => 'SF 220-24: 24 RJ-45/10/100TX + 2 combo-gig',
+		'processors' => array
+		(
+			'cisco-smb-1-to-2-combo-1000SFP',
+			'cisco-smb-1-to-2-combo-1000T',
+			'cisco-smb-any-100TX',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.84.24.2' => array
+	(
+		'dict_key' => 2356,
+		'text' => 'SF 220-24P: 24 RJ-45/10/100TX + 2 combo-gig',
+		'processors' => array
+		(
+			'cisco-smb-1-to-2-combo-1000SFP',
+			'cisco-smb-1-to-2-combo-1000T',
+			'cisco-smb-any-100TX',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.84.48.1' => array
+	(
+		'dict_key' => 2355,
+		'text' => 'SF 220-48: 48 RJ-45/10/100TX + 2 combo-gig',
+		'processors' => array
+		(
+			'cisco-smb-1-to-2-combo-1000SFP',
+			'cisco-smb-1-to-2-combo-1000T',
+			'cisco-smb-any-100TX',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.84.48.2' => array
+	(
+		'dict_key' => 2354,
+		'text' => 'SF 220-48P: 48 RJ-45/10/100TX + 2 combo-gig',
+		'processors' => array
+		(
+			'cisco-smb-1-to-2-combo-1000SFP',
+			'cisco-smb-1-to-2-combo-1000T',
+			'cisco-smb-any-100TX',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.84.26.1' => array
+	(
+		'dict_key' => 2353,
+		'text' => 'SG 220-26: 24 RJ-45/10/100TX/1000T(X) + 2 combo-gig',
+		'processors' => array
+		(
+			'cisco-smb-25-to-26-combo-1000SFP',
+			'cisco-smb-25-to-26-combo-1000T',
+			'cisco-smb-any-1000T',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.84.26.2' => array
+	(
+		'dict_key' => 2352,
+		'text' => 'SG 220-26P: 24 RJ-45/10/100TX/1000T(X) + 2 combo-gig',
+		'processors' => array
+		(
+			'cisco-smb-25-to-26-combo-1000SFP',
+			'cisco-smb-25-to-26-combo-1000T',
+			'cisco-smb-any-1000T',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.84.50.1' => array
+	(
+		'dict_key' => 2351,
+		'text' => 'SG 220-50: 48 RJ-45/10/100TX/1000T(X) + 2 combo-gig',
+		'processors' => array
+		(
+			'cisco-smb-49-to-50-combo-1000SFP',
+			'cisco-smb-49-to-50-combo-1000T',
+			'cisco-smb-any-1000T',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.84.50.2' => array
+	(
+		'dict_key' => 2350,
+		'text' => 'SG 220-50P: 48 RJ-45/10/100TX/1000T(X) + 2 combo-gig',
+		'processors' => array
+		(
+			'cisco-smb-49-to-50-combo-1000SFP',
+			'cisco-smb-49-to-50-combo-1000T',
+			'cisco-smb-any-1000T',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.87.24.1' => array
+	(
+		'dict_key' => 2345,
+		'text' => 'SF 200-24: 24 RJ-45/10/100TX + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-1-to-2-combo-1000SFP',
+			'generic-gi-1-to-2-1000T',
+			'generic-fa-any-100TX',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.87.24.2' => array
+	(
+		'dict_key' => 2346,
+		'text' => 'SF 200-24P: 24 RJ-45/10/100TX + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-1-to-2-combo-1000SFP',
+			'generic-gi-1-to-2-1000T',
+			'generic-fa-any-100TX',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.87.24.3' => array
+	(
+		'dict_key' => 2347,
+		'text' => 'SF 200-24FP: 24 RJ-45/10/100TX + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-1-to-2-combo-1000SFP',
+			'generic-gi-1-to-2-1000T',
+			'generic-fa-any-100TX',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.87.48.1' => array
+	(
+		'dict_key' => 2348,
+		'text' => 'SF 200-48: 48 RJ-45/10/100TX + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-1-to-2-combo-1000SFP',
+			'generic-gi-1-to-2-1000T',
+			'generic-fa-any-100TX',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.87.48.2' => array
+	(
+		'dict_key' => 2349,
+		'text' => 'SF 200-48P: 48 RJ-45/10/100TX + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-1-to-2-combo-1000SFP',
+			'generic-gi-1-to-2-1000T',
+			'generic-fa-any-100TX',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.88.10.3' => array
+	(
+		'dict_key' => 2342,
+		'text' => 'SG 200-10FP: 8 RJ-45/10/100TX/1000T(X) + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-9-to-10-combo-1000SFP',
+			'generic-gi-9-to-10-1000T',
+			'generic-gi-any-1000T',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.88.18.1' => array
+	(
+		'dict_key' => 2341,
+		'text' => 'SG 200-18: 16 RJ-45/10/100TX/1000T(X) + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-17-to-18-combo-1000SFP',
+			'generic-gi-17-to-18-1000T',
+			'generic-gi-any-1000T',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.88.26.1' => array
+	(
+		'dict_key' => 2338,
+		'text' => 'SG 200-26: 24 RJ-45/10/100TX/1000T(X) + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-25-to-26-combo-1000SFP',
+			'generic-gi-25-to-26-1000T',
+			'generic-gi-any-1000T',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.88.26.2' => array
+	(
+		'dict_key' => 2339,
+		'text' => 'SG 200-26P: 24 RJ-45/10/100TX/1000T(X) + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-25-to-26-combo-1000SFP',
+			'generic-gi-25-to-26-1000T',
+			'generic-gi-any-1000T',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.88.26.3' => array
+	(
+		'dict_key' => 2340,
+		'text' => 'SG 200-26FP: 24 RJ-45/10/100TX/1000T(X) + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-25-to-26-combo-1000SFP',
+			'generic-gi-25-to-26-1000T',
+			'generic-gi-any-1000T',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.88.50.1' => array
+	(
+		'dict_key' => 2335,
+		'text' => 'SG 200-50: 48 RJ-45/10/100TX/1000T(X) + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-49-to-50-combo-1000SFP',
+			'generic-gi-49-to-50-1000T',
+			'generic-gi-any-1000T',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.88.50.2' => array
+	(
+		'dict_key' => 2336,
+		'text' => 'SG 200-50P: 48 RJ-45/10/100TX/1000T(X) + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-49-to-50-combo-1000SFP',
+			'generic-gi-49-to-50-1000T',
+			'generic-gi-any-1000T',
+		),
+		'ifDescrOID' => 'ifName',
+	),
+	'9.6.1.88.50.3' => array
+	(
+		'dict_key' => 2337,
+		'text' => 'SG 200-50FP: 48 RJ-45/10/100TX/1000T(X) + 2 combo-gig',
+		'processors' => array
+		(
+			'generic-gi-49-to-50-combo-1000SFP',
+			'generic-gi-49-to-50-1000T',
 			'generic-gi-any-1000T',
 		),
 		'ifDescrOID' => 'ifName',
@@ -2247,6 +3181,18 @@ $known_switches = array // key is system OID w/o "enterprises" prefix
 		'dict_key' => 1412,
 		'text' => 'N5K-C5548P: 32 SFP+/10000',
 		'processors' => array ('nexus-any-10000SFP+', 'nexus-mgmt'),
+	),
+	'9.12.3.1.3.1106' => array
+	(
+		'dict_key' => 2333,
+		'text' => 'N3K-3048P: 48 RJ-45/100-1000TX + 4 SFP+/1000-10000',
+		'processors' => array ('nexus-3048-49-to-52-1000SFP', 'nexus-3048-1000TX', 'nexus-mgmt'),
+	),
+	'9.12.3.1.3.1417' => array
+	(
+		'dict_key' => 2331,
+		'text' => 'Nexus 3132Q: 32 QSFP+',
+		'processors' => array ('nexus-any-QSFP-split', 'nexus-any-QSFP+', 'nexus-mgmt'),
 	),
 	'11.2.3.7.11.9' => array
 	(
@@ -2302,8 +3248,8 @@ $known_switches = array // key is system OID w/o "enterprises" prefix
 	'11.2.3.7.11.34' => array
 	(
 		'dict_key' => 864,
-		'text' => 'J8164A: 24 RJ-45/10-100TX POE + 2 RJ-45/10-100-1000T(X)',
-		'processors' => array ('procurve-25-to-26-1000T', 'procurve-chassis-100TX'),
+		'text' => 'J4900A: 24 RJ-45/10-100TX + 2 combo-gig',
+		'processors' => array ('procurve-25-to-26-combo-1000SFP', 'procurve-25-to-26-1000T', 'procurve-chassis-100TX'),
 	),
 	'11.2.3.7.11.35' => array
 	(
@@ -2323,16 +3269,34 @@ $known_switches = array // key is system OID w/o "enterprises" prefix
 		'text' => 'J4899B: 48 RJ-45/10-100TX + 2 RJ-45/10-100-1000T(X)',
 		'processors' => array ('procurve-49-to-50-1000T', 'procurve-chassis-100TX'),
 	),
+	'11.2.3.7.11.45' => array
+	(
+		'dict_key' => 864,
+		'text' => 'J4900B: 24 RJ-45/10-100TX + 2 combo-gig',
+		'processors' => array ('procurve-25-to-26-combo-1000SFP', 'procurve-25-to-26-1000T', 'procurve-chassis-100TX'),
+	),
 	'11.2.3.7.11.53' => array
 	(
 		'dict_key' => 881,
 		'text' => 'J8773A: modular system',
 		'processors' => array ('procurve-modular-1000T'),
 	),
+	'11.2.3.7.11.58' => array
+	(
+		'dict_key' => 876,
+		'text' => 'J8692A: 20 RJ-45/10-100-1000T(X) + 4 combo-gig',
+		'processors' => array ('procurve-21-to-24-combo-1000SFP', 'procurve-chassis-1000T'),
+	),
+	'11.2.3.7.11.59' => array
+	(
+		'dict_key' => 877,
+		'text' => 'J8693A: 44 RJ-45/10-100-1000T(X) + 4 combo-gig',
+		'processors' => array ('procurve-45-to-48-combo-1000SFP', 'procurve-chassis-1000T'),
+	),
 	'11.2.3.7.11.62' => array
 	(
 		'dict_key' => 855,
-		'text' => 'J9020A: 48 RJ-45/10-100TX + 2 RJ-45/10-1000-1000T(x) + 2 SFP-1000',
+		'text' => 'J9020A: 48 RJ-45/10-100TX + 2 RJ-45/10-1000-1000T(X) + 2 SFP-1000',
 		'processors' => array ('procurve-51-to-52-1000SFP', 'procurve-49-to-50-1000T', 'procurve-chassis-100TX'),
 	),
 	'11.2.3.7.11.63' => array
@@ -2359,6 +3323,12 @@ $known_switches = array // key is system OID w/o "enterprises" prefix
 		'text' => 'J9050A: 48 RJ-45/10-100-1000T',
 		'processors' => array ('procurve-chassis-1000T'),
 	),
+	'11.2.3.7.11.76' => array
+	(
+		'dict_key' => 860,
+		'text' => 'J9085A: 24 RJ-45/10-100TX + 2 1000T + 2 SFP-1000',
+		'processors' => array ('procurve-25-to-26-1000T', 'procurve-27-to-28-1000SFP', 'procurve-chassis-100TX'),
+	),
 	'11.2.3.7.11.78' => array
 	(
 		'dict_key' => 861,
@@ -2382,6 +3352,12 @@ $known_switches = array // key is system OID w/o "enterprises" prefix
 		'dict_key' => 850,
 		'text' => 'J9028B: 22 RJ-45/10-100-1000T(X) + 2 combo-gig',
 		'processors' => array ('smc2-combo-23-to-24', 'smc2-any-1000T'),
+	),
+	'11.2.3.7.11.84' => array
+	(
+		'dict_key' => 2096,
+		'text' => 'J9146A: 20 RJ-45/10-100-1000T(X) + 4 combo-gig + varying uplinks',
+		'processors' => array ('procurve-21-to-24-combo-1000SFP', 'procurve-chassis-1000T'),
 	),
 	'11.2.3.7.11.85' => array
 	(
@@ -2431,17 +3407,71 @@ $known_switches = array // key is system OID w/o "enterprises" prefix
 		'text' => 'J9452A: 48 RJ-45/10-100-1000T + 2 SFP-10000+',
 		'processors' => array ('procurve-49-to-52-10000SFP+', 'procurve-chassis-1000T'),
 	),
+	'11.2.3.7.11.131' => array
+	(
+		'dict_key' => 2396,
+		'text' => 'J9625A: 24 RJ-45/10-100TX (12 PoE) + 2 1000T + 2 SFP-1000',
+		'processors' => array ('procurve-25-to-26-1000T', 'procurve-27-to-28-1000SFP', 'procurve-chassis-100TX'),
+	),
+	'11.2.3.7.11.154' => array
+	(
+		'dict_key' => 2213,
+		'text' => 'J9728A: 44 RJ-45/10-100-1000T + 4 combo-gig',
+		'processors' => array ('procurve-45-to-48-combo-1000SFP', 'procurve-chassis-1000T'),
+	),
+	'43.1.16.4.3.8' => array
+	(
+		'dict_key' => 780,
+		'text' => '5500G-EI 48-Port: 44 RJ-45/10-100-1000T(X) + 4 combo-gig',
+		'processors' => array ('3com-49-to-50-1000SFP', '3com-51-to-52-1000SFP', '3com-any-1000T'),
+	),
+	'43.1.16.4.3.21' => array
+	(
+		'dict_key' => 766,
+		'text' => '4500 26-port: 24 100TX + 2 SFP/1000T combo',
+		'processors' => array ('3com-27-to-28-1000T', '3com-25-to-26-1000SFP', '3com-any-100TX'),
+	),
+	'43.1.16.4.3.22' => array
+	(
+		'dict_key' => 767,
+		'text' => '4500 52-port: 48 100TX + 2 SFP/1000T combo',
+		'processors' => array ('3com-49-to-50-1000SFP', '3com-51-to-52-1000T', '3com-any-100TX'),
+	),
+	'43.1.16.4.3.23' => array
+	(
+		'dict_key' => 768,
+		'text' => '4500-PWR 26-port: 24 100TX + 2 SFP/1000T combo',
+		'processors' => array ('3com-27-to-28-1000T', '3com-25-to-26-1000SFP', '3com-any-100TX'),
+	),
+	'43.1.16.4.3.24' => array
+	(
+		'dict_key' => 769,
+		'text' => '4500-PWR 52-port: 48 100TX + 2 SFP/1000T combo',
+		'processors' => array ('3com-49-to-50-1000SFP', '3com-51-to-52-1000T', '3com-any-100TX'),
+	),
 	'43.1.16.4.3.29' => array
 	(
 		'dict_key' => 758,
-		'text' => '4200G: 44 RJ-45/10-100-1000T(X) + 4 combo-gig',
-		'processors' => array ('3com-49-to-52-1000SFP', '3com-any-1000T'),
+		'text' => '4200G 48-port: 44 RJ-45/10-100-1000T(X) + 4 combo-gig',
+		'processors' => array ('3com-49-to-50-1000SFP', '3com-51-to-52-1000SFP', '3com-any-1000T'),
+	),
+	'43.1.16.4.3.31' => array
+	(
+		'dict_key' => 771,
+		'text' => '4500G 48-port: 44 RJ-45/10-100-1000T(X) + 4 combo-gig',
+		'processors' => array ('3com-49-to-50-1000SFP', '3com-51-to-52-1000SFP', '3com-any-1000T'),
 	),
 	'43.1.16.4.3.45' => array
 	(
 		'dict_key' => 760,
 		'text' => '4210 52-port: 48 100TX + 2 1000T + 2 SFP',
-		'processors' => array ('3com-49-to-50-1000T', '3com-49-to-52-1000SFP', '3com-any-100TX'),
+		'processors' => array ('3com-49-to-50-1000T', '3com-51-to-52-1000SFP', '3com-any-100TX'),
+	),
+	'43.1.16.4.3.83' => array
+	(
+		'dict_key' => 2092,
+		'text' => '4510G 24-port: 24 RJ-45/10-100-1000T(X) + 4 SFP combo-gig',
+		'processors' => array ('3com-25-to-26-1000SFP', '3com-27-to-28-1000SFP', '3com-any-1000T'),
 	),
 	'45.3.68.5' => array
 	(
@@ -2485,6 +3515,12 @@ $known_switches = array // key is system OID w/o "enterprises" prefix
 		'dict_key' => 1374,
 		'text' => 'SMC8150L2: 46 RJ-45/10-100-1000T(X) + 4 combo ports',
 		'processors' => array ('smc-combo-45-to-48', 'nortel-any-1000T'),
+	),
+	'207.1.4' => array
+	(
+		'dict_key' => 2095,
+		'text' => 'AT-GS950/24: 20 RJ-45/10-100-1000T(X) + 4 combo ports',
+		'processors' => array ('generic-21-to-24-combo-1000SFP', 'generic-any-1000T'),
 	),
 	'207.1.14.53' => array
 	(
@@ -2647,6 +3683,12 @@ $known_switches = array // key is system OID w/o "enterprises" prefix
 		'text' => 'FWS648G: 4 combo-gig + 44 RJ-45/10-100-1000T(X)',
 		'processors' => array ('fgs-1-to-4-comboSFP', 'fgs-any-1000T'),
 	),
+	'1991.1.3.53.1.2' => array
+	(
+		'dict_key' => 1044,
+		'text' => 'TurboIron 24X : 4 10/100/1000T RJ-45, 24 10000 SFP+, 1 10/100/1000 RJ-45 + 1 Db9 Serial Mgmt',
+		'processors' => array ('turboiron-any-10000SFP+', 'turboiron-any-10-100-1000T', 'fcx-management'),
+	),
 	'1991.1.3.54.2.4.1.1' => array # L2 software
 	(
 		'dict_key' => 1362,
@@ -2707,6 +3749,18 @@ $known_switches = array // key is system OID w/o "enterprises" prefix
 		'text' => 'CE5850-48T4S2Q-EI: 48 RJ-45/10-100-1000T(X) + 4 SFP+ slots + 2 QSFP+ slots',
 		'processors' => array ('hce-any-1000T', 'hce-any-SFP', 'hce-any-QSFP', 'quidway-mgmt'),
 	),
+	'2011.2.239.5' => array
+	(
+		'dict_key' => 1772,
+		'text' => 'CE6850-48S4Q-EI: 48 4 SFP+ slots + 4 QSFP+ slots',
+		'processors' => array ('hce-any-1000T', 'hce-any-SFP', 'hce-any-QSFP', 'quidway-mgmt'),
+	),
+	'2011.2.239.11' => array
+	(
+		'dict_key' => 2226,
+		'text' => 'CE7850-32Q-EI: 32 QSFP+ slots',
+		'processors' => array ('hce-any-QSFP-split', 'hce-any-QSFP', 'quidway-mgmt'),
+	),
 	'2636.1.1.1.2.29' => array
 	(
 		'dict_key' => 925,
@@ -2732,6 +3786,19 @@ $known_switches = array // key is system OID w/o "enterprises" prefix
 		'text' => 'Juniper EX4200 series',
 		'processors' => array ('juniper-ex-pic0-1000T', 'juniper-ex-mgmt'),
 	),
+	'2636.1.1.1.2.43' => array
+	(
+		'dict_key' => 2395,
+		'text' => 'Juniper EX2200 series',
+		'processors' => array ('juniper-ex-pic0-1000T', 'juniper-ex-mgmt'),
+	),
+	'3955.6.1.2024.1' => array
+	(
+		'dict_key' => 2212,
+		'text' => 'Linksys SRW2024P: 22 RJ-45/10-100-1000T(X) + 2 combo ports',
+		'processors' => array ('generic-g12-and-g24-combo-1000SFP', 'generic-g-any-1000T'),
+		'ifDescrOID' => 'ifName',
+	),
 	'3955.6.1.2048.1' => array
 	(
 		'dict_key' => 1624,
@@ -2743,6 +3810,13 @@ $known_switches = array // key is system OID w/o "enterprises" prefix
 	(
 		'dict_key' => 1966,
 		'text' => 'Linksys SRW224G4: 24-port 10/100 + 4-Port Gigabit Switch with WebView',
+		'processors' => array ('generic-g-1-to-2-1000T', 'generic-g-3-to-4-combo-1000SFP', 'generic-g-3-to-4-combo-1000T', 'generic-e-any-100TX'),
+		'ifDescrOID' => 'ifName',
+	),
+	'3955.6.5048' => array
+	(
+		'dict_key' => 2093,
+		'text' => 'Linksys SRW248G4: 48-port 10/100 + 4-Port Gigabit Switch with WebView',
 		'processors' => array ('generic-g-1-to-2-1000T', 'generic-g-3-to-4-combo-1000SFP', 'generic-g-3-to-4-combo-1000T', 'generic-e-any-100TX'),
 		'ifDescrOID' => 'ifName',
 	),
@@ -2873,6 +3947,37 @@ $known_switches = array // key is system OID w/o "enterprises" prefix
 		'text' => 'DCS-7124S: 24 SFP+/10000',
 		'processors' => array ('arista-any-SFP+', 'arista-management'),
 	),
+	'1991.1.3.57.2.1.1.1' => array
+	(
+		'dict_key' => 2239,
+		'text' => 'ICX6430-48: 48 1000T + 4 SFP+/1000',
+		'processors' => array ('brocade-icx-64xx-1000T','brocade-icx-64xx-1000SFP', 'fcx-management'),
+	),
+	'1991.1.3.48.4.1' => array
+	(
+		'dict_key' => 2239,
+		'text' => 'Stacked ICX6430-48: 48 1000T + 4 SFP+/1000',
+		'processors' => array ('brocade-icx-64xx-1000T','brocade-icx-64xx-1000SFP', 'fcx-management'),
+	),
+	'1991.1.3.48.5.1' => array
+	(
+		'dict_key' => 2240,
+		'text' => 'Stacked ICX6450-48: 48 1000T + 4 SFP+/10000',
+		'processors' => array ('brocade-icx-64xx-1000T','brocade-icx-64xx-10000SFP', 'fcx-management'),
+	),
+	'25506.11.1.82' => array
+	(
+		'dict_key' => 2176,
+		'text' => 'JE006A: 24 RJ-45/10-100-1000T(X) + 4 SFP-1000 ports',
+		'processors' => array ('3com-25-to-26-1000SFP', '3com-27-to-28-1000SFP', '3com-any-1000T'),
+	),
+	'26543.1.7.1' => array
+	(
+		'dict_key' => 2241,
+		'text' => 'IBM System Networking RackSwitch G8000',
+		'processors' => array ('ibm-45-to-48-SFP','ibm-49-to-52-SFP+','ibm-any-1000T'),
+	),
+
 );
 
 global $swtype_pcre;
@@ -2883,13 +3988,22 @@ $swtype_pcre = array
 	'/Huawei Versatile Routing Platform Software.+VRP.+Software,\s*Version 5\.70 /is' => 1369,
 	'/Huawei Versatile Routing Platform Software.+VRP.+Software,\s*Version 5\.110 /is' => 2080,
 	'/Huawei Versatile Routing Platform Software.+VRP.+Software,\s*Version 5\.120 /is' => 2081,
-	'/Huawei Versatile Routing Platform Software.+VRP.+Software,\s*Version 8\.50 /is' => 2027,
+	'/Huawei Versatile Routing Platform Software.+VRP.+Software,\s*Version 5\.\d{3,} /is' => 2081, // fallback for all 5.120+
+	'/Huawei Versatile Routing Platform Software.+VRP.+Software,\s*Version 8\./is' => 2027, // fallback for all 8.x
 	// FIXME: get sysDescr for IronWare 5 and add a pattern
 	'/^Brocade Communications Systems.+, IronWare Version 07\./' => 1364,
 	'/^Juniper Networks,.+JUNOS 9\./' => 1366,
 	'/^Juniper Networks,.+JUNOS 10\./' => 1367,
 	'/^Arista Networks EOS version 4\./' => 1675,
 	'/^Dell Force10 OS\b.*\bApplication Software Version: 8(\.\d+){3}/' => 1594,
+	'/^Cisco NX-OS\b.*Version 4\.0\b.*/' => 963,
+	'/^Cisco NX-OS\b.*Version 4\.1\b.*/' => 964,
+	'/^Cisco NX-OS\b.*Version 4\.2\b.*/' => 1365,
+	'/^Cisco NX-OS\b.*Version 5\.0\b.*/' => 1410,
+	'/^Cisco NX-OS\b.*Version 5\.1\b.*/' => 1411,
+	'/^Cisco NX-OS\b.*Version 5\.2\b.*/' => 1809,
+	'/^Cisco NX-OS\b.*Version 6\.1\b.*/' => 2028,
+	'/^Cisco NX-OS\b.*Version .*/' => 1643, // default 6.0
 );
 
 function updateStickerForCell ($cell, $attr_id, $new_value)
@@ -2897,8 +4011,8 @@ function updateStickerForCell ($cell, $attr_id, $new_value)
 	if
 	(
 		isset ($cell['attrs'][$attr_id])
-		and !strlen ($cell['attrs'][$attr_id]['value'])
-		and	strlen ($new_value)
+		and $cell['attrs'][$attr_id]['value'] == ''
+		and $new_value != ''
 	)
 		commitUpdateAttrValue ($cell['id'], $attr_id, $new_value);
 }
@@ -2913,20 +4027,17 @@ function checkPIC ($port_type_id)
 	{
 		$compat_array = array();
 		foreach (getPortInterfaceCompat() as $record)
-		{
-			$key = $record['iif_id'] . '-' . $record['oif_id'];
-			$compat_array[$key] = 1;
-		}
+			$compat_array[$record['iif_id'] . '-' . $record['oif_id']] = 1;
 	}
 
 	if (preg_match ('/^(?:(\d+)-)?(\d+)$/', $port_type_id, $m))
 	{
 		$iif_id = $m[1];
 		$oif_id = $m[2];
-		if (empty ($iif_id))
+		if ($iif_id == '')
 		{
 			$iif_id = 1;
-			$port_type_id = $iif_id . '-' . $port_type_id;
+			$port_type_id = '1-' . $port_type_id;
 		}
 		if (! array_key_exists ($port_type_id, $compat_array))
 		{
@@ -2936,17 +4047,21 @@ function checkPIC ($port_type_id)
 	}
 }
 
-$msgcode['doSNMPmining']['ERR1'] = 161;
-$msgcode['doSNMPmining']['ERR2'] = 162;
 function doSNMPmining ($object_id, $snmpsetup)
 {
 	$objectInfo = spotEntity ('object', $object_id);
 	$objectInfo['attrs'] = getAttrValues ($object_id);
 	$endpoints = findAllEndpoints ($object_id, $objectInfo['name']);
 	if (count ($endpoints) == 0)
-		return showFuncMessage (__FUNCTION__, 'ERR1'); // endpoint not found
+	{
+		showError ('Endpoint not found. Please either set FQDN attribute or assign an IP address to the object.');
+		return;
+	}
 	if (count ($endpoints) > 1)
-		return showFuncMessage (__FUNCTION__, 'ERR2'); // can't pick an address
+	{
+		showError ('More than one IP address is assigned to this object, please configure FQDN attribute.');
+		return;
+	}
 
 	switch ($objectInfo['objtype_id'])
 	{
@@ -2961,21 +4076,25 @@ function doSNMPmining ($object_id, $snmpsetup)
 	}
 }
 
-$msgcode['doSwitchSNMPmining']['ERR3'] = 188;
-$msgcode['doSwitchSNMPmining']['ERR4'] = 189;
 function doSwitchSNMPmining ($objectInfo, $device)
 {
 	global $known_switches, $iftable_processors;
 
 	if (FALSE === ($sysObjectID = $device->snmpget ('sysObjectID.0')))
-		return showFuncMessage (__FUNCTION__, 'ERR3'); // // fatal SNMP failure
-	$sysObjectID = preg_replace ('/^.*(enterprises\.|joint-iso-ccitt\.)([\.[:digit:]]+)$/', '\\2', $sysObjectID);
+	{
+		showError ('Fatal SNMP failure');
+		return;
+	}
+	$sysObjectID = preg_replace ('/^.*( \.1\.3\.6\.1\.|enterprises\.|joint-iso-ccitt\.)([\.[:digit:]]+)$/', '\\2', $sysObjectID);
 	if (!isset ($known_switches[$sysObjectID]))
-		return showFuncMessage (__FUNCTION__, 'ERR4', array ($sysObjectID)); // unknown OID
+	{
+		showError ("Unknown OID '{$sysObjectID}'");
+		return;
+	}
 	$sysName = substr ($device->snmpget ('sysName.0'), strlen ('STRING: '));
 	$sysDescr = substr ($device->snmpget ('sysDescr.0'), strlen ('STRING: '));
 	$sysDescr = str_replace (array ("\n", "\r"), " ", $sysDescr);  // Make it one line
-	$ifDescr_tablename = (isset($known_switches[$sysObjectID]['ifDescrOID'])) ? $known_switches[$sysObjectID]['ifDescrOID'] : 'ifDescr';
+	$ifDescr_tablename = array_fetch ($known_switches[$sysObjectID], 'ifDescrOID', 'ifDescr');
 	showSuccess ($known_switches[$sysObjectID]['text']);
 	foreach (array_keys ($known_switches[$sysObjectID]['processors']) as $pkey)
 		if (!array_key_exists ($known_switches[$sysObjectID]['processors'][$pkey], $iftable_processors))
@@ -2986,9 +4105,11 @@ function doSwitchSNMPmining ($objectInfo, $device)
 	updateStickerForCell ($objectInfo, 2, $known_switches[$sysObjectID]['dict_key']);
 	updateStickerForCell ($objectInfo, 3, $sysName);
 	detectSoftwareType ($objectInfo, $sysDescr);
+	$desiredPorts = array();
 	switch (1)
 	{
 	case preg_match ('/^9\.1\./', $sysObjectID): // Catalyst w/one AC port
+	case preg_match ('/^9\.5\.18/', $sysObjectID):
 		$exact_release = preg_replace ('/^.*, Version ([^ ]+), .*$/', '\\1', $sysDescr);
 		$major_line = preg_replace ('/^([[:digit:]]+\.[[:digit:]]+)[^[:digit:]].*/', '\\1', $exact_release);
 		$ios_codes = array
@@ -2998,37 +4119,39 @@ function doSwitchSNMPmining ($objectInfo, $device)
 			'12.2' => 252,
 			'15.0' => 1901,
 			'15.1' => 2082,
+			'15.2' => 2142,
 		);
 		updateStickerForCell ($objectInfo, 5, $exact_release);
 		if (array_key_exists ($major_line, $ios_codes))
 			updateStickerForCell ($objectInfo, 4, $ios_codes[$major_line]);
 		$sysChassi = $device->snmpget ('1.3.6.1.4.1.9.3.6.3.0');
-		if ($sysChassi !== FALSE or $sysChassi !== NULL)
+		if ($sysChassi !== FALSE || $sysChassi !== NULL)
 			updateStickerForCell ($objectInfo, 1, str_replace ('"', '', substr ($sysChassi, strlen ('STRING: '))));
 		checkPIC ('1-29');
-		commitAddPort ($objectInfo['id'], 'con0', '1-29', 'console', ''); // RJ-45 RS-232 console
+		addDesiredPort ($desiredPorts, 'con0', '1-29', 'console', ''); // RJ-45 RS-232 console
 		if (preg_match ('/Cisco IOS Software, C2600/', $sysDescr))
-			commitAddPort ($objectInfo['id'], 'aux0', '1-29', 'auxillary', ''); // RJ-45 RS-232 aux port
+			addDesiredPort ($desiredPorts, 'aux0', '1-29', 'auxillary', ''); // RJ-45 RS-232 aux port
 		if ($sysObjectID == '9.1.956')
 		{
 			// models with two AC inputs
 			checkPIC ('1-16');
-			commitAddPort ($objectInfo['id'], 'AC-in-1', '1-16', 'AC1', '');
-			commitAddPort ($objectInfo['id'], 'AC-in-2', '1-16', 'AC2', '');
+			addDesiredPort ($desiredPorts, 'AC-in-1', '1-16', 'AC1', '');
+			addDesiredPort ($desiredPorts, 'AC-in-2', '1-16', 'AC2', '');
 		}
-		elseif ($sysObjectID != '9.1.749' and $sysObjectID != '9.1.920')
+		elseif ($sysObjectID != '9.1.749' && $sysObjectID != '9.1.920')
 		{
 			// assume the rest have one AC input, but exclude blade devices
 			checkPIC ('1-16'); // AC input
-			commitAddPort ($objectInfo['id'], 'AC-in', '1-16', '', '');
+			addDesiredPort ($desiredPorts, 'AC-in', '1-16', '', '');
 		}
 		break;
 	case preg_match ('/^9\.5\.42/', $sysObjectID): // Catalyst 2948 running CatOS
-	case preg_match ('/^9\.6\.1\./', $sysObjectID): // Cisco SF series
+	case preg_match ('/^9\.6\.1\./', $sysObjectID): // Cisco SMB series switches (200, 220, 300, 500)
+	case preg_match ('/^2011\.2\.239?\./', $sysObjectID): // Huawei
 		checkPIC ('1-681');
-		commitAddPort ($objectInfo['id'], 'con0', '1-681', 'console', ''); // DB-9 RS-232 console
+		addDesiredPort ($desiredPorts, 'con0', '1-681', 'console', ''); // DB-9 RS-232 console
 		checkPIC ('1-16');
-		commitAddPort ($objectInfo['id'], 'AC-in', '1-16', '', '');
+		addDesiredPort ($desiredPorts, 'AC-in', '1-16', '', '');
 		break;
 	case preg_match ('/^9\.12\.3\.1\.3\./', $sysObjectID): // Nexus
 		$exact_release = preg_replace ('/^.*, Version ([^ ]+), .*$/', '\\1', $sysDescr);
@@ -3037,18 +4160,24 @@ function doSwitchSNMPmining ($objectInfo, $device)
 		(
 			'4.0' => 963,
 			'4.1' => 964,
+			'4.2' => 1365,
+			'5.0' => 1410,
+			'5.1' => 1411,
+			'5.2' => 1809,
+			'6.0' => 1643,
+			'6.1' => 2028,
 		);
 		if (array_key_exists ($major_line, $nxos_codes))
 			updateStickerForCell ($objectInfo, 4, $nxos_codes[$major_line]);
 		updateStickerForCell ($objectInfo, 5, $exact_release);
 		$sysChassi = $device->snmpget ('1.3.6.1.2.1.47.1.1.1.1.11.149');
-		if ($sysChassi !== FALSE or $sysChassi !== NULL)
+		if ($sysChassi !== FALSE || $sysChassi !== NULL)
 			updateStickerForCell ($objectInfo, 1, str_replace ('"', '', substr ($sysChassi, strlen ('STRING: '))));
 		checkPIC ('1-29');
-		commitAddPort ($objectInfo['id'], 'con0', '1-29', 'console', ''); // RJ-45 RS-232 console
+		addDesiredPort ($desiredPorts, 'con0', '1-29', 'console', ''); // RJ-45 RS-232 console
 		checkPIC ('1-16'); // AC input
-		commitAddPort ($objectInfo['id'], 'AC-in-1', '1-16', 'AC1', '');
-		commitAddPort ($objectInfo['id'], 'AC-in-2', '1-16', 'AC2', '');
+		addDesiredPort ($desiredPorts, 'AC-in-1', '1-16', 'AC1', '');
+		addDesiredPort ($desiredPorts, 'AC-in-2', '1-16', 'AC2', '');
 		break;
 	case preg_match ('/^11\.2\.3\.7\.11\.(\d+)$/', $sysObjectID, $matches): // ProCurve
 		$console_per_product = array
@@ -3058,18 +4187,22 @@ function doSwitchSNMPmining ($objectInfo, $device)
 			78 => '1-29',
 			79 => '1-29',
 			80 => '1-29',
+			84 => '1-29',
 			86 => '1-29',
 			87 => '1-29',
 			94 => '1-29',
 			95 => '1-29',
+			154 => '1-29',
 			19 => '1-681', # DB-9 RS-232
 			31 => '1-681',
 			34 => '1-681',
+			58 => '1-681',
+			59 => '1-681',
 		);
 		if (array_key_exists ($matches[1], $console_per_product))
 		{
 			checkPIC ($console_per_product[$matches[1]]);
-			commitAddPort ($objectInfo['id'], 'console', $console_per_product[$matches[1]], 'console', '');
+			addDesiredPort ($desiredPorts, 'console', $console_per_product[$matches[1]], 'console', '');
 		}
 		$oom_per_product = array
 		(
@@ -3078,46 +4211,31 @@ function doSwitchSNMPmining ($objectInfo, $device)
 		if (array_key_exists ($matches[1], $oom_per_product))
 		{
 			checkPIC ($oom_per_product[$matches[1]]);
-			commitAddPort ($objectInfo['id'], 'mgmt', $oom_per_product[$matches[1]], 'mgmt', '');
+			addDesiredPort ($desiredPorts, 'mgmt', $oom_per_product[$matches[1]], 'mgmt', '');
 		}
 		checkPIC ('1-16');
-		commitAddPort ($objectInfo['id'], 'AC-in', '1-16', '', '');
+		addDesiredPort ($desiredPorts, 'AC-in', '1-16', '', '');
 		$exact_release = preg_replace ('/^.* revision ([^ ]+), .*$/', '\\1', $sysDescr);
 		updateStickerForCell ($objectInfo, 5, $exact_release);
 		break;
-	case preg_match ('/^4526\.100\.4\.(6|10)/', $sysObjectID): // NETGEAR (without console)
-		checkPIC ('1-16');
-		commitAddPort ($objectInfo['id'], 'AC-in', '1-16', '', '');
-		break;
-	case preg_match ('/^4526\.100\./', $sysObjectID): // NETGEAR (with console)
-		checkPIC ('1-681');
-		commitAddPort ($objectInfo['id'], 'console', '1-681', 'console', ''); // DB-9 RS-232 console
-		checkPIC ('1-16');
-		commitAddPort ($objectInfo['id'], 'AC-in', '1-16', '', '');
-		break;
-	case preg_match ('/^2011\.2\.239?\./', $sysObjectID): // Huawei
-		checkPIC ('1-681');
-		commitAddPort ($objectInfo['id'], 'con0', '1-681', 'console', ''); // DB-9 RS-232 console
-		checkPIC ('1-16');
-		commitAddPort ($objectInfo['id'], 'AC-in', '1-16', '', '');
-		break;
-	case preg_match ('/^2636\.1\.1\.1\.2\.3(0|1)/', $sysObjectID): // Juniper EX3200/EX4200
+	case preg_match ('/^2636\.1\.1\.1\.2\.(30|31|43)/', $sysObjectID): // Juniper EX2200/EX3200/EX4200
 		$sw_version = preg_replace ('/^.*, kernel JUNOS ([^ ]+).*$/', '\\1', $sysDescr);
 		updateStickerForCell ($objectInfo, 5, $sw_version);
 		// one RJ-45 RS-232 and one AC port (it could be DC, but chances are it's AC)
 		checkPIC ('1-29');
-		commitAddPort ($objectInfo['id'], 'con', '1-29', 'CON', ''); // RJ-45 RS-232 console
+		addDesiredPort ($desiredPorts, 'con', '1-29', 'CON', ''); // RJ-45 RS-232 console
 		checkPIC ('1-16');
-		commitAddPort ($objectInfo['id'], 'AC-in', '1-16', '', '');
+		addDesiredPort ($desiredPorts, 'AC-in', '1-16', '', '');
 		// Juniper uses the same sysObjectID for multiple HW models, override if necessary
 		if (preg_match ('/^Juniper Networks, Inc. ex3200-48t internet router/', $sysDescr))
 			updateStickerForCell ($objectInfo, 2, 902);
 		if (preg_match ('/^Juniper Networks, Inc. ex4200-48t internet router/', $sysDescr))
 			updateStickerForCell ($objectInfo, 2, 907);
 		break;
+	case preg_match ('/^1991\.1\.3\.53\.1\.2$/', $sysObjectID): // TurboIron 24X
 	case preg_match ('/^2636\.1\.1\.1\.2\./', $sysObjectID): // Juniper
 		checkPIC ('1-681');
-		commitAddPort ($objectInfo['id'], 'console', '1-681', 'console', ''); // DB-9 RS-232 console
+		addDesiredPort ($desiredPorts, 'console', '1-681', 'console', ''); // DB-9 RS-232 console
 		break;
 	case preg_match ('/^1991\.1\.3\.45\./', $sysObjectID): // snFGSFamily
 	case preg_match ('/^1991\.1\.3\.46\./', $sysObjectID): // snFLSFamily
@@ -3126,7 +4244,7 @@ function doSwitchSNMPmining ($objectInfo, $device)
 		updateStickerForCell ($objectInfo, 5, $exact_release);
 		# FOUNDRY-SN-AGENT-MIB::snChasSerNum.0
 		$sysChassi = $device->snmpget ('enterprises.1991.1.1.1.1.2.0');
-		if ($sysChassi !== FALSE or $sysChassi !== NULL)
+		if ($sysChassi !== FALSE || $sysChassi !== NULL)
 			updateStickerForCell ($objectInfo, 1, str_replace ('"', '', substr ($sysChassi, strlen ('STRING: '))));
 
 		# Type of uplink module installed.
@@ -3159,12 +4277,12 @@ function doSwitchSNMPmining ($objectInfo, $device)
 			if ($count)
 			{
 				checkPIC ('1-16');
-				commitAddPort ($objectInfo['id'], $PSU_cooked, '1-16', '', '');
+				addDesiredPort ($desiredPorts, $PSU_cooked, '1-16', '', '');
 			}
 		}
 		# fixed console port
 		checkPIC ('1-681');
-		commitAddPort ($objectInfo['id'], 'console', '1-681', 'console', ''); // DB-9 RS-232 console
+		addDesiredPort ($desiredPorts, 'console', '1-681', 'console', ''); // DB-9 RS-232 console
 		break;
 	case preg_match ('/^1916\.2\./', $sysObjectID): // Extreme Networks Summit
 		$xos_release = preg_replace ('/^ExtremeXOS version ([[:digit:]]+)\..*$/', '\\1', $sysDescr);
@@ -3177,12 +4295,12 @@ function doSwitchSNMPmining ($objectInfo, $device)
 		if (array_key_exists ($xos_release, $xos_codes))
 			updateStickerForCell ($objectInfo, 4, $xos_codes[$xos_release]);
 		checkPIC ('1-681');
-		commitAddPort ($objectInfo['id'], 'console', '1-681', 'console', ''); // DB-9 RS-232
+		addDesiredPort ($desiredPorts, 'console', '1-681', 'console', ''); // DB-9 RS-232
 		checkPIC ('1-16');
-		commitAddPort ($objectInfo['id'], 'AC-in', '1-16', '', '');
+		addDesiredPort ($desiredPorts, 'AC-in', '1-16', '', '');
 		break;
 	case preg_match ('/^6027\.1\./', $sysObjectID): # Force10
-		commitAddPort ($objectInfo['id'], 'aux0', '1-29', 'RS-232', ''); // RJ-45 RS-232 console
+		addDesiredPort ($desiredPorts, 'aux0', '1-29', 'RS-232', ''); // RJ-45 RS-232 console
 		$m = array();
 		if (preg_match ('/Force10 Application Software Version: ([\d\.]+)/', $sysDescr, $m))
 		{
@@ -3203,15 +4321,15 @@ function doSwitchSNMPmining ($objectInfo, $device)
 		if ($device->snmpget ('enterprises.6027.3.10.1.2.3.1.3.1.1') == 'INTEGER: 1')
 		{
 			checkPIC ('1-16');
-			commitAddPort ($objectInfo['id'], 'PSU0', '1-16', 'PSU0', '');
+			addDesiredPort ($desiredPorts, 'PSU0', '1-16', 'PSU0', '');
 		}
 		# F10-S-SERIES-CHASSIS-MIB::chSysPowerSupplyType.1.2
 		if ($device->snmpget ('enterprises.6027.3.10.1.2.3.1.3.1.2') == 'INTEGER: 1')
 		{
 			checkPIC ('1-16');
-			commitAddPort ($objectInfo['id'], 'PSU1', '1-16', 'PSU1', '');
+			addDesiredPort ($desiredPorts, 'PSU1', '1-16', 'PSU1', '');
 		}
-		if (strlen ($serialNo))
+		if ($serialNo != '')
 			updateStickerForCell ($objectInfo, 1, str_replace ('"', '', substr ($serialNo, strlen ('STRING: '))));
 		break;
 	case preg_match ('/^171\.10\.63\.8/', $sysObjectID): // D-Link DES-3052
@@ -3220,39 +4338,40 @@ function doSwitchSNMPmining ($objectInfo, $device)
 	case preg_match ('/^674\.10895\.300(3|4|7|9)/', $sysObjectID):
 	case preg_match ('/^674\.10895\.301(0|4|7|9)/', $sysObjectID):
 	case preg_match ('/^674\.10895\.302(0|1|8)/', $sysObjectID):
-	case preg_match ('/^3955\.6\.1\.2048\.1/', $sysObjectID): // Linksys
-	case preg_match ('/^3955\.6\.5024/', $sysObjectID):
-	case preg_match ('/^11863\.1\.1\.1/', $sysObjectID): // TPLink
+	case preg_match ('/^3955\.6\.1\.20(24|48)\.1/', $sysObjectID): // Linksys
+	case preg_match ('/^3955\.6\.50(24|48)/', $sysObjectID): // Linksys
+	case preg_match ('/^4526\.100\./', $sysObjectID): // NETGEAR (with console)
+	case preg_match ('/^11863\.1\.1\.1/', $sysObjectID): // TP-Link
 	case preg_match ('/^11863\.6\.10\.58/', $sysObjectID):
 		// one DB-9 RS-232 and one AC port
 		checkPIC ('1-681');
-		commitAddPort ($objectInfo['id'], 'console', '1-681', '', ''); // DB-9 RS-232
+		addDesiredPort ($desiredPorts, 'console', '1-681', '', ''); // DB-9 RS-232
 		checkPIC ('1-16');
-		commitAddPort ($objectInfo['id'], 'AC-in', '1-16', '', '');
+		addDesiredPort ($desiredPorts, 'AC-in', '1-16', '', '');
 		break;
 	case preg_match ('/^388\.18/', $sysObjectID): // Motorola RFS 4000
 		// one RJ-45 RS-232 and one AC port
 		checkPIC ('1-29');
-		commitAddPort ($objectInfo['id'], 'console', '1-29', 'console', '');
+		addDesiredPort ($desiredPorts, 'console', '1-29', 'console', '');
 		checkPIC ('1-16');
-		commitAddPort ($objectInfo['id'], 'AC-in', '1-16', '', '');
+		addDesiredPort ($desiredPorts, 'AC-in', '1-16', '', '');
 		break;
 	case preg_match ('/^207\.1\.14\./', $sysObjectID): // Allied Telesyn
 		// one RJ-45 RS-232 and two AC ports
 		checkPIC ('1-29');
-		commitAddPort ($objectInfo['id'], 'console', '1-29', 'console', '');
+		addDesiredPort ($desiredPorts, 'console', '1-29', 'console', '');
 		checkPIC ('1-16');
-		commitAddPort ($objectInfo['id'], 'AC-in-1', '1-16', 'AC1', '');
-		commitAddPort ($objectInfo['id'], 'AC-in-2', '1-16', 'AC2', '');
+		addDesiredPort ($desiredPorts, 'AC-in-1', '1-16', 'AC1', '');
+		addDesiredPort ($desiredPorts, 'AC-in-2', '1-16', 'AC2', '');
 		break;
 	case preg_match ('/^674\.10895\.3000/', $sysObjectID):
 		// one DB-9 RS-232, one 100Mb OOB mgmt, and one AC port
 		checkPIC ('1-681');
-		commitAddPort ($objectInfo['id'], 'console', '1-681', '', ''); // DB-9 RS-232
+		addDesiredPort ($desiredPorts, 'console', '1-681', '', ''); // DB-9 RS-232
 		checkPIC ('1-19');
-		commitAddPort ($objectInfo['id'], 'mgmt', '1-19', '', '');
+		addDesiredPort ($desiredPorts, 'mgmt', '1-19', '', '');
 		checkPIC ('1-16');
-		commitAddPort ($objectInfo['id'], 'AC-in', '1-16', '', '');
+		addDesiredPort ($desiredPorts, 'AC-in', '1-16', '', '');
 		break;
 	case preg_match ('/^43\.1\.16\.4\.3\./', $sysObjectID): // 3Com
 		$sw_version = preg_replace('/^.* Version 3Com OS ([^ ]+).*$/', '\\1', $sysDescr);
@@ -3260,9 +4379,9 @@ function doSwitchSNMPmining ($objectInfo, $device)
 
 		// one RJ-45 RS-232 and one AC port
 		checkPIC ('1-29');
-		commitAddPort ($objectInfo['id'], 'console', '1-29', '', ''); // RJ-45 RS-232 console
+		addDesiredPort ($desiredPorts, 'console', '1-29', '', ''); // RJ-45 RS-232 console
 		checkPIC ('1-16');
-		commitAddPort ($objectInfo['id'], 'AC-in', '1-16', '', '');
+		addDesiredPort ($desiredPorts, 'AC-in', '1-16', '', '');
 		break;
 	case preg_match ('/^10977\.11825\.11833\.97\.25451\.12800\.100\.4\.4/', $sysObjectID): // Netgear
 		$sw_version = preg_replace('/^.* V([^ ]+).*$/', '\\1', $sysDescr);
@@ -3270,31 +4389,33 @@ function doSwitchSNMPmining ($objectInfo, $device)
 
 		// one AC port, no console
 		checkPIC ('1-16');
-		commitAddPort ($objectInfo['id'], 'AC-in', '1-16', '', '');
+		addDesiredPort ($desiredPorts, 'AC-in', '1-16', '', '');
 		break;
 	case preg_match ('/^171\.10\.76\.10/', $sysObjectID): // D-Link DGS-1210-24
+	case preg_match ('/^207\.1\.4\./', $sysObjectID): // Allied Telesyn AT-GS950/24
+	case preg_match ('/^4526\.100\.4\.(6|10)/', $sysObjectID): // NETGEAR (without console)
 		// one AC port, no console
 		checkPIC ('1-16');
-		commitAddPort ($objectInfo['id'], 'AC-in', '1-16', '', '');
+		addDesiredPort ($desiredPorts, 'AC-in', '1-16', '', '');
 		break;
 	case preg_match ('/^30065\.1\.3011\./', $sysObjectID): // Arista
 		checkPIC ('1-29');
-		commitAddPort ($objectInfo['id'], 'console', '1-29', 'IOIOI', '');
+		addDesiredPort ($desiredPorts, 'console', '1-29', 'IOIOI', '');
 		$sw_version = preg_replace ('/^Arista Networks EOS version (.+) running on .*$/', '\\1', $sysDescr);
 		updateStickerForCell ($objectInfo, 5, $sw_version);
-		if (strlen ($serialNo = $device->snmpget ('mib-2.47.1.1.1.1.11.1'))) # entPhysicalSerialNumber.1
+		if ('' != $serialNo = $device->snmpget ('mib-2.47.1.1.1.1.11.1')) # entPhysicalSerialNumber.1
 			updateStickerForCell ($objectInfo, 1, str_replace ('"', '', substr ($serialNo, strlen ('STRING: '))));
 		break;
 	case preg_match ('/^119\.1\.203\.2\.2\./', $sysObjectID): # NEC
 		checkPIC ('1-681');
-		commitAddPort ($objectInfo['id'], 'console 0', '1-681', 'console', '');
+		addDesiredPort ($desiredPorts, 'console 0', '1-681', 'console', '');
 		checkPIC ('1-16');
-		commitAddPort ($objectInfo['id'], 'PS1', '1-16', '', '');
-		commitAddPort ($objectInfo['id'], 'PS2', '1-16', '', '');
+		addDesiredPort ($desiredPorts, 'PS1', '1-16', '', '');
+		addDesiredPort ($desiredPorts, 'PS2', '1-16', '', '');
 		break;
 	case preg_match ('/^26543\.1\.7\./', $sysObjectID): # IBM
 		checkPIC ('1-29');
-		commitAddPort ($objectInfo['id'], 'console', '1-29', '', ''); # RJ-45 RS-232 console
+		addDesiredPort ($desiredPorts, 'console', '1-29', '', ''); # RJ-45 RS-232 console
 		break;
 	default: // Nortel...
 		break;
@@ -3343,10 +4464,12 @@ function doSwitchSNMPmining ($objectInfo, $device)
 				continue; // try next processor on current port
 			$newlabel = preg_replace ($iftable_processors[$processor_name]['pattern'], $iftable_processors[$processor_name]['label'], $iface['ifDescr'], 1, $count);
 			checkPIC ($iftable_processors[$processor_name]['dict_key']);
-			commitAddPort ($objectInfo['id'], $newname, $iftable_processors[$processor_name]['dict_key'], $newlabel, $iface['ifPhysAddress']);
+			addDesiredPort ($desiredPorts, $newname, $iftable_processors[$processor_name]['dict_key'], $newlabel, $iface['ifPhysAddress']);
 			if (!$iftable_processors[$processor_name]['try_next_proc']) // done with this port
 				continue 2;
 		}
+	// Sync ports
+	syncObjectPorts ($objectInfo, $desiredPorts);
 	// No failure up to this point, thus leave current tab for the "Ports" one.
 	return buildRedirectURL (NULL, 'ports');
 }
@@ -3360,15 +4483,17 @@ function doPDUSNMPmining ($objectInfo, $switch)
 	updateStickerForCell ($objectInfo, 3, $switch->getName());
 	updateStickerForCell ($objectInfo, 5, $switch->getFWRev());
 	checkPIC ('1-16');
-	commitAddPort ($objectInfo['id'], 'input', '1-16', 'input', '');
+	$desiredPorts = array();
+	addDesiredPort ($desiredPorts, 'input', '1-16', 'input', '');
 	$portno = 1;
 	foreach ($switch->getPorts() as $name => $port)
 	{
-		$label = mb_strlen ($port[0]) ? $port[0] : $portno;
+		$label = $port[0] != '' ? $port[0] : $portno;
 		checkPIC ('1-1322');
-		commitAddPort ($objectInfo['id'], $portno, '1-1322', $port[0], '');
+		addDesiredPort ($desiredPorts, $portno, '1-1322', $port[0], '');
 		$portno++;
 	}
+	syncObjectPorts ($objectInfo, $desiredPorts);
 	showSuccess ("Added ${portno} port(s)");
 	return buildRedirectURL (NULL, 'ports');
 }
@@ -3569,6 +4694,8 @@ function nextMACAddress ($addr)
 {
 	if ($addr == '')
 		return '';
+	if (! preg_match ('/^[0-9a-f]{2}(:[0-9a-f]{2}){5}$/i', $addr))
+		throw new InvalidArgException ('addr', $addr, 'invalid MAC address format');
 	$bytes = array();
 	foreach (explode (':', $addr) as $hex)
 		$bytes[] = hexdec ($hex);

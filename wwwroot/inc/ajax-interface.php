@@ -6,7 +6,7 @@
 
 /*
  *
- *  This file contains HTML-generating funcitons which are needed in ajax handler
+ *  This file contains HTML-generating functions required by AJAX handlers.
  *
  *
 */
@@ -17,22 +17,14 @@ function formatPortLinkHints ($object_id)
 {
 	$result = array();
 	$linkStatus = queryDevice ($object_id, 'getportstatus');
+	$statusmap = array
+	(
+		'up' => 'link up',
+		'down' => 'link down',
+		'disabled' => 'link disabled',
+	);
 	foreach ($linkStatus as $portname => $link_info)
 	{
-		$link_info = $linkStatus[$portname];
-		switch ($link_info['status'])
-		{
-			case 'up':
-				$img_filename = 'link-up.png';
-				break;
-			case 'down':
-				$img_filename = 'link-down.png';
-				break;
-			case 'disabled':
-				$img_filename = 'link-disabled.png';
-				break;
-		}
-
 		$hidden_lines = array();
 		$hidden_lines[] = $portname . ': ' . $link_info['status'];
 		if (isset ($link_info['speed']))
@@ -41,7 +33,7 @@ function formatPortLinkHints ($object_id)
 			$hidden_lines[] = 'Duplex: ' . $link_info['duplex'];
 		if (count ($hidden_lines))
 			$result[$portname]['popup'] = implode ('<br>', $hidden_lines);
-		$visible_part = "<img width=16 height=16 src='?module=chrome&uri=pix/${img_filename}'>";
+		$visible_part = getImageHREF (array_fetch ($statusmap, $link_info['status'], '16x16t'));
 		$result[$portname]['inline'] = $visible_part;
 	}
 	// put empty pictures for not-found ports
@@ -49,7 +41,7 @@ function formatPortLinkHints ($object_id)
 	amplifyCell ($object);
 	foreach ($object['ports'] as $port)
 		if (! isset ($result[$port['name']]))
-			$result[$port['name']]['inline'] = "<img width=16 height=16 src='?module=chrome&uri=pix/1x1t.gif'>";
+			$result[$port['name']]['inline'] = getImageHREF ('16x16t');
 	return $result;
 }
 
@@ -58,10 +50,18 @@ function formatPortLinkHints ($object_id)
 function formatPortMacHints ($object_id)
 {
 	$result = array();
-	$macList = queryDevice ($object_id, 'getmaclist');
+	if ($_REQUEST['ac'] == 'get-port-portmac')
+	{
+		$port_name = $_REQUEST['port_name'];
+		$ports = reduceSubarraysToColumn (getObjectPortsAndLinks ($_REQUEST['object_id'], FALSE), 'name');
+		$macList = in_array($port_name, $ports) ?
+				queryDevice ($object_id, 'getportmaclist', array ($port_name)) :
+				array();
+	}
+	else
+		$macList = queryDevice ($object_id, 'getmaclist');
 	foreach ($macList as $portname => $list)
 	{
-		$list = $macList[$portname];
 		$visible_part = count ($list) . ' MACs';
 		$result[$portname]['inline'] = $visible_part;
 		if (count ($list))
@@ -106,40 +106,20 @@ function formatLoggedSpan ($log_item, $text, $html_class = '')
 		$title = htmlspecialchars ($log_item['user'] . ', ' . formatAge ($log_item['time']), ENT_QUOTES);
 	}
 	return "<span" .
-		(strlen ($html_class) ? " class='$html_class'" : '') .
-		(strlen ($title) ? " title='$title'" : '') .
+		($html_class != '' ? " class='$html_class'" : '') .
+		($title != '' ? " title='$title'" : '') .
 		">$text</span>";
-}
-
-function getTagSelectAJAX()
-{
-	global $taglist;
-	$options = array();
-	$selected_id = '';
-	if (! isset($_REQUEST['tagid']))
-		$options['error'] = "Sorry, param 'tagid' is empty. Reload page and try again";
-	elseif (! preg_match("/tagid_(\d+)/i", $_REQUEST['tagid'], $m))
-		$options['error'] = "Sorry, wrong format tagid:'".$_REQUEST['tagid']."'. Reload page and try again";
-	else
-	{
-		$current_tag_id = $m[1];
-		$selected_id = $taglist[$current_tag_id]['parent_id'];
-		echo $selected_id;
-		$options[0] = '-- NONE --';
-		foreach ($taglist as $tag_id => $taginfo)
-			if (! in_array ($current_tag_id, $taginfo['trace']) && $current_tag_id != $tag_id)
-				$options[$tag_id] = $taginfo['tag'];
-	}
-	foreach ($options as $tag_id => $value)
-		echo "<option value='$tag_id'" .
-			($tag_id == $selected_id ? ' selected' : '') .
-			'>' . htmlspecialchars ($value) . '</option>';
 }
 
 function getLocationSelectAJAX()
 {
+	global $pageno, $tabno;
+	$pageno = 'rackspace';
+	$tabno = 'default';
+	fixContext();
+	assertPermission();
 	$locationlist = listCells ('location');
-	$locationtree = treeFromList ($locationlist); // adds ['trace'] keys into $locationlist items
+	$locationtree = treeFromList (addTraceToNodes ($locationlist));
 	$options = array ();
 	$selected_id = '';
 	if (! isset($_REQUEST['locationid']))
@@ -150,7 +130,6 @@ function getLocationSelectAJAX()
 	{
 		$current_location_id = $m[1];
 		$selected_id = $locationlist[$current_location_id]['parent_id'];
-		echo $selected_id;
 		echo "<option value=0>-- NONE --</option>";
 	}
 	foreach ($locationtree as $location)
@@ -162,8 +141,40 @@ function getLocationSelectAJAX()
 			echo 'selected ';
 		echo "style='font-weight: bold'>${location['name']}</option>";
 		if ($location['kidc'] > 0)
-			printLocationChildrenSelectOptions ($location, 0, $selected_id, $current_location_id);
+			printLocationChildrenSelectOptions ($location, $selected_id, $current_location_id);
 	}
+}
+
+function getParentNodeOptionsAJAX()
+{
+	global $pageno, $tabno;
+	$selected_id = NULL;
+	try
+	{
+		$tmp = genericAssertion ('node_id', 'string');
+		if (! preg_match ('/^nodeid_(\d+)$/', $tmp, $m))
+			throw new InvalidRequestArgException ('node_id', $tmp, 'format mismatch');
+		$node_id = $m[1];
+		switch ($node_type = genericAssertion ('node_type', 'string'))
+		{
+			case 'existing tag':
+				$pageno = 'tagtree';
+				$tabno = 'default';
+				fixContext();
+				assertPermission();
+				global $taglist;
+				$selected_id = $taglist[$node_id]['parent_id'];
+				$options = getParentNodeOptionsExisting ($taglist, 'tag', $node_id);
+				break;
+			default:
+				throw new InvalidRequestArgException ('node_type', $node_type, 'unknown type');
+		}
+	}
+	catch (Exception $e)
+	{
+		$options = array ('error' => $e->getMessage());
+	}
+	echo getSelectOptions ($options, $selected_id);
 }
 
 function verifyCodeAJAX()
@@ -188,90 +199,87 @@ function getPortInfoAJAX()
 	(
 		'get-port-link' => 'formatPortLinkHints',
 		'get-port-mac'  => 'formatPortMacHints',
+		'get-port-portmac' => 'formatPortMacHints',
 		'get-port-conf' => 'formatPortConfigHints',
 	);
 	$opmap = array
 	(
 		'get-port-link' => 'get_link_status',
 		'get-port-mac'  => 'get_mac_list',
+		'get-port-portmac' => 'get_port_mac_list',
 		'get-port-conf' => 'get_port_conf',
 	);
-	genericAssertion ('object_id', 'uint');
-	fixContext (spotEntity ('object', $_REQUEST['object_id']));
+	$object_id = genericAssertion ('object_id', 'uint');
+	fixContext (spotEntity ('object', $object_id));
 	assertPermission ('object', 'liveports', $opmap[$_REQUEST['ac']]);
-	echo json_encode ($funcmap[$_REQUEST['ac']] ($_REQUEST['object_id']));
+	echo json_encode ($funcmap[$_REQUEST['ac']] ($object_id));
 }
 
 function updatePortRsvAJAX()
 {
-	global $sic;
-	assertUIntArg ('id');
-	assertStringArg ('text', TRUE);
-	$port_info = getPortInfo ($sic['id']);
+	$text = genericAssertion ('text', 'string0');
+	$port_info = getPortInfo (genericAssertion ('id', 'uint'));
 	fixContext (spotEntity ('object', $port_info['object_id']));
 	assertPermission ('object', 'ports', 'editPort');
 	if ($port_info['linked'])
-		throw new RackTablesError ('Cant update port comment: port is already linked');
+		throw new RackTablesError ('Can\'t update port comment: port is already linked');
 	if (! isset ($port_info['reservation_comment']))
 		$port_info['reservation_comment'] = '';
-	if ($port_info['reservation_comment'] !== $sic['text'])
-		commitUpdatePortComment ($sic['id'], $sic['text']);
+	if ($port_info['reservation_comment'] !== $text)
+		commitUpdatePortComment ($port_info['id'], $text);
 	echo 'OK';
 }
 
 function updateIPNameAJAX()
 {
-	global $sic;
-	assertStringArg ('text', TRUE);
+	$text = genericAssertion ('text', 'string0');
 	$ip_bin = assertIPArg ('id');
 	$addr = getIPAddress ($ip_bin);
 	if (! empty ($addr['allocs']) && empty ($addr['name']))
-		throw new RackTablesError ('Cant update IP name: address is allocated');
+		throw new RackTablesError ('Can\'t update IP name: address is allocated');
 	$net = spotNetworkByIP ($ip_bin);
 	if (isset ($net))
 		fixContext ($net);
 	assertPermission ('ipaddress', 'properties', 'editAddress');
-	$reserved = (empty ($sic['text']) ? 'no' : $addr['reserved']); // unset reservation if user clears name
-    $comment = (empty ($addr['comment']) ? '' : $addr['comment']);
-	updateAddress ($ip_bin, $sic['text'], $reserved, $comment);
+	$reserved = ($text == '' ? 'no' : $addr['reserved']); // unset reservation if user clears name
+	$comment = (empty ($addr['comment']) ? '' : $addr['comment']);
+	updateAddress ($ip_bin, $text, $reserved, $comment);
 	echo 'OK';
 }
 
 function updateIPCommentAJAX()
 {
-	global $sic;
-	assertStringArg ('text', TRUE);
+	$text = genericAssertion ('text', 'string0');
 	$ip_bin = assertIPArg ('id');
 	$addr = getIPAddress ($ip_bin);
 	$net = spotNetworkByIP ($ip_bin);
 	if (isset ($net))
 		fixContext ($net);
 	assertPermission ('ipaddress', 'properties', 'editAddress');
-	updateAddress ($ip_bin, $addr['name'], $addr['reserved'], $sic['text']);
+	updateAddress ($ip_bin, $addr['name'], $addr['reserved'], $text);
 	echo 'OK';
 }
 
 function updateCableIdAJAX()
 {
-	global $sic;
-	assertUIntArg ('id');
-	assertStringArg ('text', TRUE);
-	$link_info = getPortLinkInfo ($sic['id']);
-	// verify permissions for both sides of the link
-	$porta_info = getPortInfo ($link_info['porta']);
-	$portb_info = getPortInfo ($link_info['portb']);
-	fixContext();
-	spreadContext (spotEntity ('object', $porta_info['object_id']));
-	spreadContext (spotEntity ('object', $portb_info['object_id']));
+	$text = genericAssertion ('text', 'string0');
+	$port_info = getPortInfo (genericAssertion ('id', 'uint'));
+	fixContext (spotEntity ('object', $port_info['object_id']));
 	assertPermission ('object', 'ports', 'editPort');
-	if (! $link_info['porta'])
-		throw new RackTablesError ('Cant update cable ID: port is not linked');
-	commitUpdatePortLink ($sic['id'], $sic['text']);
+	if (! $port_info['linked'])
+		throw new RackTablesError ('Can\'t update cable ID: port is not linked');
+	if ($port_info['reservation_comment'] !== $text)
+		commitUpdatePortLink ($port_info['id'], $text);
 	echo 'OK';
 }
 
 function updateRackSortOrderAJAX()
 {
+	global $pageno, $tabno;
+	$pageno = 'row';
+	$tabno = 'editracks';
+	fixContext();
+	assertPermission (NULL, NULL, 'save'); // FIXME: operation code not in navigation.php
 	updateRackSortOrder ($_REQUEST['racks']);
 	echo 'OK';
 }
@@ -282,10 +290,52 @@ function getNetUsageAJAX()
 	list ($ip, $mask) = explode ('/', $_REQUEST['net_id']);
 	$ip_bin = ip_parse ($ip);
 	$net = spotNetworkByIP ($ip_bin, $mask + 1);
-	if (! isset ($net) or $net['mask'] != $mask)
+	if (! isset ($net) || $net['mask'] != $mask)
 		$net = constructIPRange ($ip_bin, $mask);
 	loadIPAddrList ($net);
 	echo getRenderedIPNetCapacity ($net);
+}
+
+
+function getAutocompleteListAJAX()
+{
+	$term = genericAssertion ('term', 'string0');
+	$realm = genericAssertion ('realm', 'string');
+
+	if (! $term)
+		return;
+
+	switch ($realm)
+	{
+		case 'object':
+			$result = usePreparedSelectBlade ("SELECT name FROM Object WHERE name LIKE ? GROUP BY name ORDER BY name LIMIT 101", array ("%$term%"));
+			$rows = $result->fetchAll (PDO::FETCH_COLUMN, 0);
+			unset ($result);
+			break;
+		case 'asset':
+			$result = usePreparedSelectBlade ("SELECT asset_no FROM Object WHERE asset_no LIKE ? GROUP BY asset_no ORDER BY asset_no LIMIT 101", array ("%$term%"));
+			$rows = $result->fetchAll (PDO::FETCH_COLUMN, 0);
+			unset ($result);
+			break;
+		case 'port':
+			$result = usePreparedSelectBlade ("SELECT name FROM Port WHERE name LIKE ? GROUP BY name ORDER BY name LIMIT 101", array ("%$term%"));
+			$rows = $result->fetchAll (PDO::FETCH_COLUMN, 0);
+			unset ($result);
+			break;
+		case 'bond_name':
+			$object_id = genericAssertion ('object_id', 'uint');
+			$result = usePreparedSelectBlade ("SELECT name FROM Port WHERE object_id = ? AND name LIKE ? GROUP BY name ORDER BY name LIMIT 101", array ($object_id, "%$term%"));
+			$rows = $result->fetchAll (PDO::FETCH_COLUMN, 0);
+			unset ($result);
+			break;
+		default:
+			return;
+	}
+
+	if (count ($rows) > 100 )
+		$rows[] = array ('label' => '...', 'value' => '');
+
+	echo json_encode ($rows);
 }
 
 function pingIpv4AJAX ()

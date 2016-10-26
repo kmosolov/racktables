@@ -6,39 +6,66 @@
 
 /*
 
-The purpose of this file is to contain functions, which generate a complete
-HTTP response body and are either "dead ends" or depend on just a small
-amount of other code (which should eventually be placed in a sort of
-"first order" library file).
+This file contains functions that produce a complete HTTP response (headers
+and body) and are either self-contained or depend on just a small amount of
+other code such that they can do the job quicker than the functions that
+implement the "interface" module.
 
 */
 
 require_once 'slb-interface.php';
 
-define ('RE_STATIC_URI', '#^([[:alpha:]]+)/(?:[[:alnum:]]+[[:alnum:]_.-]*/)*[[:alnum:]\._-]+\.([[:alpha:]]+)$#');
+define ('RE_STATIC_URI', '#^(?:[[:alnum:]]+[[:alnum:]_.-]*/)+[[:alnum:]\._-]+\.([[:alpha:]]+)$#');
+
+function castRackImageException ($e)
+{
+	$m = array
+	(
+		'EntityNotFoundException' => 'rack_not_found',
+		'RTPermissionDenied' => 'access_denied',
+		'InvalidRequestArgException' => 'rack_arg_error',
+	);
+	$c = get_class ($e);
+	return array_key_exists ($c, $m) ? new RTImageError ($m[$c]) : $e;
+}
 
 function dispatchImageRequest()
 {
-	genericAssertion ('img', 'string');
 	global $pageno, $tabno;
-	switch ($_REQUEST['img'])
+	switch ($img = genericAssertion ('img', 'string'))
 	{
 	case 'minirack': // rack security context
 		$pageno = 'rack';
 		$tabno = 'default';
-		fixContext();
-		assertPermission();
+		try
+		{
+			fixContext();
+			assertPermission();
+		}
+		catch (RackTablesError $e)
+		{
+			throw castRackImageException ($e);
+		}
 		dispatchMiniRackThumbRequest (getBypassValue());
 		break;
 	case 'midirack': // rack security context
 		$pageno = 'rack';
 		$tabno = 'default';
-		fixContext();
-		assertPermission();
-		genericAssertion ('scale', 'uint');
-		# Scaling implies no caching, there is no special dispatching.
+		try
+		{
+			fixContext();
+			assertPermission();
+			$scale = genericAssertion ('scale', 'uint');
+			$object_id = array_key_exists ('object_id', $_REQUEST) ?
+				genericAssertion ('object_id', 'uint') : NULL;
+		}
+		catch (RackTablesError $e)
+		{
+			throw castRackImageException ($e);
+		}
+		// Scaling or highlighting implies no caching and thus no extra wrapper code around.
 		header ('Content-type: image/png');
-		printRackThumbImage (getBypassValue(), $_REQUEST['scale']);
+		printRackThumbImage (getBypassValue(), $scale, $object_id);
 		break;
 	case 'preview': // file security context
 		$pageno = 'file';
@@ -52,51 +79,38 @@ function dispatchImageRequest()
 		$tabno = 'cacti';
 		fixContext();
 		assertPermission();
-		genericAssertion ('server_id', 'uint');
-		genericAssertion ('graph_id', 'uint');
-		if (! array_key_exists ($_REQUEST['graph_id'], getCactiGraphsForObject (getBypassValue())))
-			throw new InvalidRequestArgException ('graph_id', $_REQUEST['graph_id']);
-		proxyCactiRequest ($_REQUEST['server_id'], $_REQUEST['graph_id']);
+		$graph_id = genericAssertion ('graph_id', 'uint');
+		if (! array_key_exists ($graph_id, getCactiGraphsForObject (getBypassValue())))
+			throw new InvalidRequestArgException ('graph_id', $graph_id);
+		proxyCactiRequest (genericAssertion ('server_id', 'uint'), $graph_id);
 		break;
 	case 'muningraph':
 		$pageno = 'object';
 		$tabno = 'munin';
 		fixContext();
 		assertPermission();
-		genericAssertion ('server_id', 'uint');
-		genericAssertion ('graph', 'string');
-		if (! array_key_exists ($_REQUEST['graph'], getMuninGraphsForObject (getBypassValue())))
-			throw new InvalidRequestArgException ('graph', $_REQUEST['graph']);
-		proxyMuninRequest ($_REQUEST['server_id'], $_REQUEST['graph']);
+		$graph = genericAssertion ('graph', 'string');
+		if (! array_key_exists ($graph, getMuninGraphsForObject (getBypassValue())))
+			throw new InvalidRequestArgException ('graph', $graph);
+		proxyMuninRequest (genericAssertion ('server_id', 'uint'), $graph);
 		break;
 	default:
-		renderErrorImage();
+		throw new InvalidRequestArgException ('img', $img);
 	}
 }
 
+// XXX: deprecated
 function renderErrorImage ()
 {
 	header("Content-type: image/png");
-	// "ERROR", 76x17, red on white
-	echo base64_decode
-	(
-		'iVBORw0KGgoAAAANSUhEUgAAAEwAAAARCAYAAAB3h0oCAAAAAXNSR0IArs4c6QAAALBJREFUWMPt' .
-		'WFsOwCAIG4v3vzL7WEyWxQdVwM1A4l/F2iHVETPzESGOMyTAInURRP0suUhb2FIho/jWXO38w4KN' .
-		'LPDGEt2jlgPBZxFKc2o8UT7Lj6SkAmfw1nx+28MkVWQlcjT9EOwjLqnpaNImi+I1j/YSl5RY/gx+' .
-		'VCCF/MnkCz4JZQtvEUXx1nyW9jCUlPVLbTJ/3MO2dsnWRq2Nwl2wTarM51rhsVEnDhT/w7C4APaJ' .
-		'ZhkIGYaUAAAAAElFTkSuQmCC'
-	);
+	echo base64_decode (IMG_76x17_ERROR);
 }
 
+// XXX: deprecated
 function renderAccessDeniedImage()
 {
 	header ('Content-type: image/png');
-	// 1x1, single black pixel
-	echo base64_decode
-	(
-		'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAAAXNSR0IArs4c6QAAAAxJREFUCNdj' .
-		'YGBgAAAABAABJzQnCgAAAABJRU5ErkJggg=='
-	);
+	echo base64_decode (IMG_1x1_BLACK);
 }
 
 // Having a local caching array speeds things up. A little.
@@ -111,6 +125,18 @@ function colorFromHex ($image, $hex)
 	$c = imagecolorallocate ($image, $r, $g, $b);
 	$colorcache[$hex] = $c;
 	return $c;
+}
+
+function createTrueColorOrThrow ($context, $width, $height)
+{
+	// Sometimes GD is missing even though it was available at install time.
+	if
+	(
+		! function_exists ('imagecreatetruecolor') ||
+		FALSE === $img = @imagecreatetruecolor ($width, $height)
+	)
+		throw new RTImageError ($context);
+	return $img;
 }
 
 # Generate a complete HTTP response for a 1:1 minirack image, use and update
@@ -136,18 +162,19 @@ function dispatchMiniRackThumbRequest ($rack_id)
 }
 
 # Generate a binary PNG image for a rack contents.
-function printRackThumbImage ($rack_id, $scale = 1)
+function printRackThumbImage ($rack_id, $scale = 1, $object_id = NULL)
 {
 	$rackData = spotEntity ('rack', $rack_id);
 	amplifyCell ($rackData);
+	if ($object_id !== NULL)
+		highlightObject ($rackData, $object_id);
 	global $rtwidth;
 	$offset[0] = 3;
 	$offset[1] = 3 + $rtwidth[0];
 	$offset[2] = 3 + $rtwidth[0] + $rtwidth[1];
 	$totalheight = 3 + 3 + $rackData['height'] * 2;
 	$totalwidth = $offset[2] + $rtwidth[2] + 3;
-	$img = @imagecreatetruecolor ($totalwidth, $totalheight)
-		or die("Cannot Initialize new GD image stream");
+	$img = createTrueColorOrThrow ('rack_php_gd_error', $totalwidth, $totalheight);
 	# It was measured, that caching palette in an array is faster, than
 	# calling colorFromHex() multiple times. It matters, when user's
 	# browser is trying to fetch many minirack images in parallel.
@@ -197,9 +224,9 @@ function printRackThumbImage ($rack_id, $scale = 1)
 function renderProgressBarImage ($done)
 {
 	if ($done > 100)
-		throw new InvalidArgException ('done', $done);
-	$img = @imagecreatetruecolor (100, 10);
-	switch (isset ($_REQUEST['theme']) ? $_REQUEST['theme'] : 'rackspace')
+		throw new RTImageError ('pbar_arg_error');
+	$img = createTrueColorOrThrow ('pbar_php_gd_error', 100, 10);
+	switch (array_fetch ($_REQUEST, 'theme', 'rackspace'))
 	{
 		case 'sparenetwork':
 			$color['T'] = colorFromHex ($img, '808080');
@@ -231,7 +258,7 @@ function renderProgressBar4Image ($px1, $px2, $px3)
 {
 	$width = 100;
 	$height = 10;
-	$img = @imagecreatetruecolor ($width, 10);
+	$img = createTrueColorOrThrow ('pbar_php_gd_error', $width, 10);
 	$offsets = array ($px1, $px2, $px3, $width - $px1 - $px2 - $px3);
 	$colors = array
 	(
@@ -245,8 +272,8 @@ function renderProgressBar4Image ($px1, $px2, $px3)
 	{
 		$off = $offsets[$i];
 		$clr = $colors[$i];
-		if ($pos + $off > $width or $off < 0)
-			throw new InvalidArgException ('px' . $i, $offsets[$i]);
+		if ($pos + $off > $width || $off < 0)
+			throw new RTImageError ('pbar_arg_error');
 		if ($off > 0)
 			imagefilledrectangle ($img, $pos, 0, $pos + $off, $height, $clr);
 		$pos += $off;
@@ -288,19 +315,11 @@ function renderProgressBar4Image ($px1, $px2, $px3)
 	imagedestroy ($img);
 }
 
+// XXX: deprecated
 function renderProgressBarError()
 {
 	header ('Content-type: image/png');
-	// 100x10, red on pink, "progr. bar error"
-	echo base64_decode
-	(
-		'iVBORw0KGgoAAAANSUhEUgAAAGQAAAAKCAYAAABCHPt+AAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A' .
-		'/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sDERYTJrBhF8sAAACvSURBVEjH' .
-		'7VdRDoAgCMXmQbz/qbhJfdnMQQiDTZ3vL6MHvEA03Yg3rIRSABBhV1xwMBXyp/JatFVYq7La1Hft' .
-		'N709xcXxWLqE4tbGr+GXdNDqw8STxSS0z9S695ZD+e05pXhHt8RRHqtebIdoRPASM2K+ePi18Gjz' .
-		'Yuwz7AKpM2cpmjPUVx3qf0OIqyLKvl+POMp6+R3Jy9oxnD4C0nsPiTrfb35viO2QiOF6foYKD57g' .
-		'f1uXQb2mAAAAAElFTkSuQmCC'
-	);
+	echo base64_decode (IMG_100x10_PBAR_ERROR);
 }
 
 function renderImagePreview ($file_id)
@@ -317,7 +336,7 @@ function renderImagePreview ($file_id)
 	unset ($file);
 	$width = imagesx ($image);
 	$height = imagesy ($image);
-	if ($width > getConfigVar ('PREVIEW_IMAGE_MAXPXS') or $height > getConfigVar ('PREVIEW_IMAGE_MAXPXS'))
+	if ($width > getConfigVar ('PREVIEW_IMAGE_MAXPXS') || $height > getConfigVar ('PREVIEW_IMAGE_MAXPXS'))
 	{
 		$ratio = getConfigVar ('PREVIEW_IMAGE_MAXPXS') / max ($width, $height);
 		$newwidth = $width * $ratio;
@@ -366,22 +385,21 @@ function proxyStaticURI ($URI)
 	$matches = array();
 	if
 	(
-		! preg_match (RE_STATIC_URI, $URI, $matches)
-		or ! in_array ($matches[1], array ('pix', 'css', 'js'))
-		or ! array_key_exists (strtolower ($matches[2]), $content_type)
+		! preg_match (RE_STATIC_URI, $URI, $matches) ||
+		! array_key_exists (strtolower ($matches[1]), $content_type)
 	)
 		printStatic404();
 	global $local_staticdir, $racktables_staticdir;
 	if (isset ($local_staticdir))
 		$fh = @fopen ("${local_staticdir}/${URI}", 'r');
-	if (! isset ($fh) or FALSE === $fh)
+	if (! isset ($fh) || FALSE === $fh)
 		$fh = @fopen ("${racktables_staticdir}/${URI}", 'r');
 	if (FALSE === $fh)
 		printStatic404();
 	if (FALSE !== $stat = fstat ($fh))
 		if (checkCachedResponse (max ($stat['mtime'], $stat['ctime']), 0))
 			exit;
-	header ('Content-type: ' . $content_type[$matches[2]]);
+	header ('Content-type: ' . $content_type[$matches[1]]);
 	fpassthru ($fh);
 	fclose ($fh);
 }
@@ -393,7 +411,7 @@ function proxyCactiRequest ($server_id, $graph_id)
 	if (! array_key_exists ($server_id, $servers))
 		throw new InvalidRequestArgException ('server_id', $server_id);
 	$cacti_url = $servers[$server_id]['base_url'];
-	$url = "${cacti_url}/graph_image.php?action=view&local_graph_id=${graph_id}&rra_id=1";
+	$url = "${cacti_url}/graph_image.php?action=view&local_graph_id=${graph_id}&rra_id=" . getConfigVar ('CACTI_RRA_ID');
 	$postvars = 'action=login&login_username=' . $servers[$server_id]['username'];
 	$postvars .= '&login_password=' . $servers[$server_id]['password'];
 
@@ -428,6 +446,12 @@ function proxyCactiRequest ($server_id, $graph_id)
 		$cookie_header = implode(";", $cookies);
 		$_SESSION['CACTICOOKIE'][$cacti_url] = $cookie_header; // store for later use by this user
 
+		// CSRF security in 0.8.8h, regexp version
+		if (preg_match("/sid:([a-z0-9,]+)\"/", $ret['contents'], $csf_output))
+		{
+			if (array_key_exists(1, $csf_output))
+				$postvars .="&__csrf_magic=$csf_output[1]";
+		}
 		// POST Login
 		curl_setopt ($session, CURLOPT_COOKIE, $cookie_header);
 		curl_setopt ($session, CURLOPT_HEADER, FALSE);
@@ -454,15 +478,21 @@ function proxyCactiRequest ($server_id, $graph_id)
 
 function proxyMuninRequest ($server_id, $graph)
 {
-    $object = spotEntity ('object', $server_id);
-    list ($host, $domain) = preg_split ("/\./", $object['dname'], 2);
+	try
+	{
+		list ($host, $domain) = getMuninNameAndDomain (getBypassValue());
+	}
+	catch (InvalidArgException $e)
+	{
+		throw new RTImageError ('munin_graph');
+	}
 
 	$ret = array();
 	$servers = getMuninServers();
 	if (! array_key_exists ($server_id, $servers))
 		throw new InvalidRequestArgException ('server_id', $server_id);
 	$munin_url = $servers[$server_id]['base_url'];
-	$url = "${munin_url}/${domain}/${object['dname']}/${graph}-day.png";
+	$url = "${munin_url}/${domain}/${host}.${domain}/${graph}-day.png";
 
 	$session = curl_init();
 

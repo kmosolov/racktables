@@ -12,12 +12,13 @@ var input = null;
 var btn = null;
 
 $(document).ready (function() {
-	$(editable_filter).each (function (i, iSpan) {
+	$(editable_filter).not('.initdone').each (function (i, iSpan) {
 		var container = $('<div class="edit-container"/>')
 			.mouseover(onSpanMouseOver);
 		$(iSpan)
 			.after (container)
 			.detach()
+			.addClass('initdone')
 			.appendTo (container);
 		container
 			.append
@@ -26,7 +27,7 @@ $(document).ready (function() {
 				.click(onPencilClick)
 			);
 	});
-	$('body').mouseover(onBodyMouseOver);
+	$(document).mouseover(onBodyMouseOver);
 
     $('.ping').html("<img src=pix/link-down.png valign=top>");
     $('#pingall').click(function() {
@@ -116,8 +117,10 @@ function onPencilClick (event) {
 		.keydown(
 			function (event) {
 				var code = event.keyCode ? event.keyCode : event.which;
-				if (code == 13)
+				if (code == 13) {
 					onFormSubmit();
+					return false;
+				}
 				else if (code == 27)
 					hideEditForm();
 			})
@@ -132,7 +135,7 @@ function onPencilClick (event) {
 	doSetCaretPosition (input[0], input[0].value.length);
 
 	group.click(function(event) { event.stopPropagation();	});
-	$('body').one('click',
+	$(document).one('click',
 		function (event) {
 			if (! waiting_response)
 				hideEditForm();
@@ -159,29 +162,25 @@ function onFormSubmit () {
 	btn.replaceWith('<img src="?module=chrome&uri=pix/ajax-loader.gif" title="Please wait" />');
 	waiting_response = true;
 
-	var op = '';
-	var item_id = '';
+	var data = {
+		'module': 'ajax',
+		'text': text
+	};
 	var list = span[0].className.split (/\s+/);
 	for (var i in list) {
 		var cn = list[i];
 		var m;
-		if (m = cn.match (/^id-(.*)/)) {
-			item_id = m[1];
-		}
-		else if (m = cn.match (/^op-(.*)/)) {
-			op = m[1];
+		if (m = cn.match (/^(.+?)-(.*)/)) {
+			data[m[1]] = m[2];
 		}
 	}
+	if (! ('ac' in data))
+		data['ac'] = data['op'];
 
 	$.ajax({
 		type: 'POST',
 		url: 'index.php',
-		data: {
-			'module': 'ajax',
-			'ac': op,
-			'id': item_id,
-			'text': text
-		},
+		data: data,
 		success: function(data, textStatus, XMLHttpRequest) {
 			if (data == 'OK')
 				span.html(text);

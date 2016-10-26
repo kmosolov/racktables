@@ -1,7 +1,9 @@
 @media print {
 	body table.maintable { font-size: 80%; }
 	.mainheader { display: none; }
-	.menubar { display: none; }
+	.searchbox { display: none; }
+	div.menubar { color: #000000; font-weight: bold; }
+	div.menubar a { color: #000000; font-weight: bold; }
 	.tabbar { display: none; }
 	div.greynavbar { border-top-width: 0px; }
 	.greynavbar * a[class=std] { display: none; }
@@ -188,6 +190,14 @@ td.sticker {
 	background-color: #e8e8e8;
 }
 
+.row_even.has_problems {
+	background-color: #ffa0a0;
+}
+
+.row_odd.has_problems {
+	background-color: #fbbcbc;
+}
+
 .row_error {
 	background-color: #ffa0a0;
 }
@@ -198,6 +208,33 @@ tr.has_problems_even {
 
 tr.has_problems_odd {
 	background-color: #ffd0d0;
+}
+
+/* In the zebra table the 1st TR always contains TH, which have a different
+ * style and are exempt from the zebra pattern. In this sense the 2nd TR
+ * where the TDs start is considered "odd" and the 3rd -- "even" and so on.
+ */
+table.zebra tr:nth-child(2n+3):not(.highlight) {
+	background: #d0d0d0;
+}
+table.zebra tr:nth-child(2n):not(.highlight) {
+	background: #e8e8e8;
+}
+table.zebra table:not(.zebra) tr {
+	background: inherit !important;
+}
+
+/* This variant results in the same pattern for a table that has no TH row
+ * at the top.
+ */
+table.zebra0 tr:nth-child(2n+1):not(.highlight) {
+	background: #e8e8e8;
+}
+table.zebra0 tr:nth-child(2n):not(.highlight) {
+	background: #d0d0d0;
+}
+table.zebra0 table:not(.zebra0) tr {
+	background: inherit !important;
 }
 
 table.cooltable {
@@ -634,7 +671,7 @@ div.vlan {
 	border: solid 4px lime !important;
 }
 
-/*this style is used for <a>s which does not contain href (ancors), to make them look like plain text*/
+/*this style is used for <a>s that do not contain href (anchors) to make them look like plain text*/
 .nolink {
 	text-decoration: none;
 	color: black;
@@ -645,7 +682,7 @@ div.vlan {
 	text-decoration: none;
 }
 
-/*this class controls popup switch info. It should be on the element which contains portname in plain text*/
+/*This class controls popup switch info. It should be on the element that contains portname in plain text.*/
 .interactive-portname {
 	cursor: default;
 }
@@ -803,7 +840,6 @@ ul.uflist {
 	padding: 0;
 }
 ul.uflist li {
-	list-type: none;
 	margin: 0;
 	padding: 5px 0 5px 0;
 }
@@ -831,9 +867,14 @@ a.noclick {
 	display: block;
 }
 
-.aac {
+.aac-right {
 	font-weight: bold;
 	margin-left: 1em;
+}
+
+.aac-left {
+	font-weight: bold;
+	margin-right: 0.5em;
 }
 
 .logentry {
@@ -926,4 +967,13 @@ a.noclick {
 	margin-top: 0.5em;
 	font-size: 12px;
 	line-height: 1.5em;
+}
+
+div.popupbar {
+	background-color: #f0f0f0;
+	border: 1px solid #3c78b5;
+	padding: 10px;
+	height: 100%;
+	text-align: center;
+	margin: 5px;
 }

@@ -1,18 +1,166 @@
-0.20.6
+0.20.12
+	bugfix: common name for blade server(utf-8) was shown incorrectly in racks (by Artem Yankovskiy)
+	bugfix: throwing a undeclared 'ParseError' exception from RackCode parser
+	bugfix: LLDP discovery for Cisco IOS: fix the case when remote device name length is 20 chars
+	bugfix: unneeded VLANs were not removed from Arista EOS4 and Marvell devices
+	bugfix: fix a PHP warning (#1609 by Maik Ehinger)
+	bugfix: location filter did not work (#1595 by Alberto Avai)
+	bugfix: decline invalid date input with a message (#1389)
+	bugfix: work around MySQL 5.7 SQL mode (#1547, #1635)
+	update: Huawei telnet gateway uses the 'terminal echo-mode line' command
+	update: Nexus 7700, Huawei S5700, Juniper QFX, Mellanox, Quanta, Ixia device models added into dictionary
+	update: Cmd+Click now inverses tag selection on OS X like Ctrl+Click does on Windows/Linix
+	update: explain usage particulars for each tag on the editor tab
+	update: increase HTML SELECT maximum width (#1611)
+	update: add support for standalone UCS servers (by Brian Pothier)
+	update: add autocomplete to port link dialog object name, asset tag and port name fields
+	update: add 1000Base-BX40 and 1000Base-BX80 port types (#1645)
+	update: upgrade CodeMirror from 3.22 to 3.24
+	update: include file timestamps in the mouse hint (#1663)
+0.20.11 2016-02-07
+	bugfix: Tag Picker does not display the full tag list as a tree (#1403)
+	bugfix: race conditions in 802.Q deploy (switch remained synced after recalc)
+	bugfix: catch EntityNotFound exceptions in data integrity report (#1439)
+	bugfix: location log entries broke the object log report (#1443)
+	bugfix: fix a PHP warning on older PHP versions (reported by Bruno Santoni)
+	bugfix: more intelligent sort function for object portnames
+	bugfix: upgrading from < 0.20.0 to >= 0.20.8 failed (#1463, #1501)
+	bugfix: containers weren't sorted in a consistent manner (#1507)
+	bugfix: live interface status on D-Link devices fixed
+	bugfix: LivePorts tab was displayed only if $any_op was allowed in permissions
+	bugfix: chapter editor: ability to re-name dictionary items keeping wiki-links
+	bugfix: IP load balancer config was not removed when wiping object's data
+	bugfix: fix file upload error handling
+	update: SNMP support for Cisco C2960-Plus series
+	update: ability to delete a VLAN keeping it in the VLAN ranges on 802.1Q ports
+	update: sort by parent locations on the Rackspace page (#1153)
+	new feature: VLAN domain groups.
+		A group is a domain that has all the VLANs of its members
+	update: SNMP support for Cisco Nexus 3132Q, WS-CE500-24PC (#1523),
+		HP J9625A (#1459), Juniper EX2200 (#1395)
+	update: ability to clean rack mounts or drop entire row (even if it contains racks inside)
+		from user interface
+	update: IP network page renders a little faster
+	update: more efficient pagination for large IPv4 networks
+	update: new 100G port types support (empty CXP, CR4, CR10, LR10, ER10)
+	update: warn when already used or reserved IP is assigned to object
+	update: allow to redefine the expiration report parameters in local plugins
+	update: allow to hide unallocated networks from IPv4 tree via
+		IPV4_TREE_SHOW_UNALLOCATED user configuration option
+0.20.10 2015-01-26
+	bugfix: port type could not be changed for an unlinked modular port (#1393)
+	bugfix: crash on object's rackspace page when PHP < 5.3 (array_replace is missing)
+	bugfix: error displaying a pop-up window when short_open_tag=0 in php.ini
+	bugfix: exception messages in CLI mode were html-escaped
+	update: SNMP support for Cisco SMB switches: all 200, 220 and 300 series models
+	update: show VLAN domain of an IP network on mouse hover
+0.20.9 2015-01-13
+	bugfix: 802.1Q support of Huawei VRP 8.80 devices
+	bugfix: adding new Cacti graphs sometimes failed, now works
+	bugfix: do not allow to turn an object into a location (#1339)
+	bugfix: handle glob() result carefully (#1273, reported by Georg Hoellrigl)
+	bugfix: fix color for zero-U objects with problems (#1189)
+	bugfix: fix syntax error crash with PHP version < 5.3 (unexpected T_FUNCTION).
+		This bug appeared in 0.20.8 and reported by Frank Altpeter.
+	bugfix: When adding large amounts of objects at once, one typo halts progress (#1369)
+	bugfix: commented, but not reserved/allocated IPs were counted as busy in net usage bar (#1217)
+	update: SNMP support for Cisco CGS-2520-24TC (#1259), WS-C2960X-24TS-LL (#1205),
+		WS-C2960X-48LPS-L, HP J8693A (#1251), HP J9728A (#1255), Linksys SRW2024P (#1183),
+		Huawei CE6850-48S4Q-EI, CE7850-32Q-EI
+	update: new 100G modular port types: CFP2, CPAK
+	update: link status feature is available on Cisco IOS XR (ASR)
+	update: remember last successful LDAP server to minimize LDAP auth delay
+	update: link status, MAC list support for ExtremeXOS
+	update: speed-up enumerating/filtering of objects
+	update: new tabindex order: search input, form inputs, other elements
+	update: provide a hint to create tags before assigning
+	update: make dictionary-based SELECTs sorting case-insensitive
+	update: telnet gateway supports IPv6 (by Aleksandr Balezin)
+	update: UI: links to rack rows are displayed on the 'Manage Rows' tab
+	update: display object types of containers/nested objects, as well as
+		the type column in the Objects table (by Mark Jazmik).
+		This feature is disabled by default (the SHOW_OBJECTTYPE config var = 'no')
+	update: check permissions when mounting an object to a rack against both the
+		object's and the rack's tags. Thus, it is possible to allow modifying object
+		but restrict mounting it to a particular rack.
+	update: consider object's FQDN to retrieve its Munin graphs (#1279)
+	update: searching by IP address comment field (by Niilo Kajander, #1359)
+	update: new Juniper MX, Cisco Nexus 3000, Cisco Small Business series
+		models added into dictionary
+	update: increase port table column width (#1387)
+	update: ability to change an unlinked inner port type (e.g. hardwired -> SFP)
+0.20.8 2014-06-07
+	bugfix: syntax error in functions.php when using PHP prior to 5.3.0 (#1195)
+	bugfix: properly format comment text for locations and racks
+	bugfix: the tab IP SLB/Load balancers displayed all the objects in system
+	bugfix: Native vlan on Huawei trunk ports no longer gets to the allowed vlans list
+	bugfix: Data Integrity report hit memory limit
+	bugfix: creating racks with tags cause warnings in TagStorage: Missing Parents integrity report
+	bugfix: LLDP neighbors was empty for some Juniper devices
+	bugfix: add object container compatibility rules for Cisco UCS (#1245) 
+	update: allow connecting to a non-standard LDAP port (by Michał Sochoń)
+	update: move port outer interfaces from the dictionary
+	update: syncdomain.php now provides some new CLI options and better lockfile handling
+	update: SNMP support for Cisco 2960X-24PS-L, 2960X-24PD-L
+	update: new {$client_x.x.x.x} auto tag containing client's IP
+	update: link status feature is available on Juniper
+	update: new port menu item: "Show port learned MACs"
+	new feature: patch cables accounting
+0.20.7 2014-03-03
+	bugfix: IP tree expansion button was broken when MAX_UNFILTERED_ENTITIES was set
+	bugfix: fix URL detection bug introduced in bugfix to #1023 (#1103)
+	bugfix: browse objects page was broken if an object's container was unnamed (#1115)
+	bugfix: some pages would not load because PHP's maximum execution time was
+		exceeded, caused by a circular reference in the location tree (#1123)
+	bugfix: do HTML escaping on error pages (reported by Lukas Reschke)
+	bugfix: logout link didn't work in some scenarios (#1129)
+	bugfix: system functions for translating IPs were not used even being available
+	bugfix: Zero-U-mounted objects were not counted in rack summary
+	bugfix: fix of sorting issue with national characters by Thomas Uhde (#837)
+	bugfix: LLDP parser fixed for Huawei VRP 8.5
+	update: enable IP addressing for all object types unless specifically excluded
+	update: SNMP support for 3Com 4510G-24, Cisco SF302-08MP, 
+		Linksys SRW248G4 by Rafael Driutti,
+		3Com 4200G 48-port (#1093), 5500G-EI 48-port (#1095) by Rainer Stumbaum,
+		AT-GS950/24 (#1105), Cisco WS-C1924 (#1111), HP J4900B (#1107),
+		J8692A & J9146A (#1143)
+	update: add the data integrity report
+	update: duplicate IP allocations of all types except 'shared' are highlighted red
+	update: upgrade CodeMirror to version 3.22
+	update: include OEM S/N 1 in expirations report (by Matthew Castanien)
+	update: display a datetime format hint for date attributes (#1051)
+	update: display location tree in object breadcrumbs (#1125)
+	update: allow rows to have properties (#1133)
+	update: objects with problems colored red on browse objects page (#1137)
+	update: use suggest-menu for tag assignment
+	update: show tag trace in tag title
+	update: spare IPv6 prefixes are limited to nibble boundary (#959)
+	update: button to fix non-canonical port names (#827)
+	update: explicitly require PHP version 5.2.10 or newer (see #1139)
+	update: leave secret.php in a safer state upon install
+	new feature: add IPv4 natting for all protocols (#971) by Tim Wilkes/Mark Wilkinson
+	new feature: display point-to-point peers when using new 'Point-to-point' IP allocation type
+	new feature: display rack power consumption as sum of mounted objects'
+		"max power" and "max current" attribute values (#701)
+0.20.6 2013-11-29
 	bugfix: "sshnokey" gateway had a bug
 	bugfix: SLB config was generated incrorrectly when multiple 
 		rspools were linked with the same balancer-vsg pair
 	bugfix: change blade orientation of Cisco 6509-V-E (#985)
 	bugfix: default values of some LDAP options weren't being used
 	bugfix: update of Cisco WS-C4948 SNMPsync port definitions (#977) by Mark Wilkinson
-	update: display friendlier message when attempting to NAT non-existent IP (#963) 
 	bugfix: jQuery.UI static files were not accessible (by Aleksandr Balezin)
 	bugfix: 404 response header for missing static files was incorrect (by Aleksandr Balezin)
 	bugfix: IOS CLI prompt detection (#1033)
 	bugfix: SLB IP assignments were stored even if a balancer object was deleted
 	bugfix: exception when searching for a alien IP address
+	bugfix: DB deadlocks in LDAP authentication when opening many tabs simultaneously
+	bugfix: object searching and updating may fail (#1031)
+	bugfix: strict standards message when managing locations or rows (#1065)
+	bugfix: ports of zero-U objects were not listed as candidates when linking ports (#917)
+	bugfix: blade objects with problems should be colored red (#1071) by Mark Wilkinson
+	update: display friendlier message when attempting to NAT non-existent IP (#963)
 	update: support of Huawei CE5800 series switch
-	update: port type can now be changed even if port is linked
 	update: mgmt link on FQDN (telnet, ssh, rdp) now supports any protocol (MGMT_PROTOS config var)
 	update: replace CodePress highlighter with CodeMirror (by Mark Jazmik)
 	update: display links to newly created rows & locations (#883)
@@ -27,14 +175,21 @@
 	update: SNMP support for Cisco ME-3400EG-2CS-A (#939), WS-C2960CG-8TC-L (#933),
 		WS-CBS3012-IBM/-I (#871), WS-C3560-8PC (#975), WS-C2950-12 (#973),
 		WS-C2950G-24-DC (#981), WS-C3560GV2-48TS (#983), WS-C2950SX-24 (#991),
-		HP ProCurve J9028B (#941), J9022A (#767), Netgear GS724TP (#1001),
-		TL-SL5428E (#1015) by Mark Wilkinson;
+		WS-C2960-8TC-L (#1063), HP ProCurve J9028B (#941), J9022A (#767),
+		Netgear GS724TP (#1001), TL-SL5428E (#1015),
+		Brocade TurboIron 24X (#1055) by Mark Wilkinson
+		3Com 4500 family of switches (#1083) by Rafael Driutti
 		Cisco WS-C3560V2-24PS (#1049), Netgear FS726TP (#859) by Aaron Dummer
 	update: port link popup now has asset no search field (#949) by Thomas Uhde
 	update: searches now examine 'dictionary' attributes (#1003)
 	update: exclude some elements when printing to paper (#464)
 	update: add resource pool info to the Virtual Resources cluster portlet (#915)
-	new feature: port tracing (#333)
+	update: remove the 'unmounted' autotag from objects inside a container (#1061)
+	update: virtual objects may use 'asset tag' and 'visible label' attributes (#1069)
+	update: display all containers and mount points on list objects page (#1081)
+	update: cell filter pages display fast if no filters specified
+		(the MAX_UNFILTERED_ENTITIES config variable must be set)
+	update: port type could now be changed even if port is linked
 	new feature: bulk selection and deslection of object rackspace checkboxes by Matthew Kelch
 0.20.5 2013-06-23
 	bugfix: 500 server error if protocol was not specified in
